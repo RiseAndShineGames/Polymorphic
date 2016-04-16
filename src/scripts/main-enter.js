@@ -1,10 +1,12 @@
 "use strict";
-
+var scores, bounds,playerPosition, playerSize, cameraPosition, camera = 0, container = 3, player = 1;
 module.exports = function(game) { // eslint-disable-line no-unused-vars
-
+    bounds = game.entities.get(container,"size");
+    playerPosition = game.entities.get(player,"position");
+    playerSize = game.entities.get(player,"size");
+    cameraPosition = game.entities.get(camera,"position");
     game.scaleCanvasToFitRectangle(1280,960);
-    var scores = game.entities.get(0,"scores");
-    console.log(game.arguments);
+    scores = game.entities.get(camera,"scores");
     if (game.arguments["scores"]) {
         scores.round1 = game.arguments["scores"].round1;
         scores.round2 = game.arguments["scores"].round2;
@@ -15,6 +17,9 @@ module.exports = function(game) { // eslint-disable-line no-unused-vars
         scores.round3 = 0;
     }
 
-    game.entities.set(0,"round",game.arguments["round"] || 0);
-    console.log(scores);
+    playerPosition.x = bounds.width / 2 - playerSize.width / 2;
+    playerPosition.y = bounds.height / 2 - playerSize.height / 2;
+    cameraPosition.x = bounds.width / 2 - game.canvas.width / 2;
+    cameraPosition.y = bounds.height / 2 - game.canvas.height / 2;
+    game.entities.set(camera,"round",game.arguments["round"] || 0);
 };
