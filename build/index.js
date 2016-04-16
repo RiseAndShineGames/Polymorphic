@@ -8904,7 +8904,7 @@
 	        for (i = 0; i < collisions.length; ++i) {
 	            other = collisions[i];
 	            game.entities.destroy(other);
-	            game.entities.set(camera, "shake", { "duration": 250, "magnitude": 10 });
+	            game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });
 	        }
 	    }, "player_hitbox");
 	};
@@ -8916,7 +8916,7 @@
 
 	"use strict";
 
-	var velocity, rotation, animation;
+	var velocity, newVel, rotation, animation, timers;
 
 	function getVelocity(game, angle, speed) {
 	    return {
@@ -8927,15 +8927,18 @@
 
 	module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
 	    ecs.addEach(function(entity, elapsed) { // eslint-disable-line no-unused-vars
+	        velocity = game.entities.get(entity, "velocity");
 	        rotation = game.entities.get(entity, "rotation");
 	        animation = game.entities.get(entity, "animation");
+	        timers = game.entities.get(entity, "timers");
 	        if (game.inputs.button("go")) {
-	            velocity = getVelocity(game, rotation.angle, game.entities.get(entity, "speed"));
-	            game.entities.set(entity, "velocity", velocity);
+	            newVel = getVelocity(game, rotation.angle, game.entities.get(entity, "speed"));
+	            game.entities.set(entity, "velocity", newVel);
 	            animation.speed = 1;
 	        } else {
-	            game.entities.set(entity, "velocity", { "x": 0, "y": 0 });
-	            animation.speed = 0;
+	            if (velocity.x != 0 && velocity.y != 0) {
+	                timers.decelerate.running = true;
+	            }
 	        }
 	        if (game.inputs.button("clockwise") && !game.inputs.button("counter_clockwise")) {
 	            rotation.angle += game.entities.get(entity, "angle_mod");
@@ -9002,16 +9005,24 @@
 
 	"use strict";
 
-	var timers, velocity;
+	var timers, velocity, friction, animation;
 
 	module.exports = function(entity, game) {
 
 	    velocity = game.entities.get(entity, "velocity");
-	    if (velocity.x > 0 && velocity.y > 0) {
+	    friction = game.entities.get(entity, "friction");
+	    animation = game.entities.get(entity, "animation");
+
+	    velocity.x *= friction.x;
+	    velocity.y *= friction.y;
+	    animation.speed *= 0.9;
+
+	    if (velocity.x != 0 && velocity.y != 0) {
 	        timers = game.entities.get(entity, "timers");
 	        timers.decelerate.time = 0;
 	        timers.decelerate.running = true;
 	    }
+
 	};
 
 
@@ -9259,19 +9270,23 @@
 					"width": 130,
 					"height": 130
 				},
+				"velocity": {
+					"x": 0,
+					"y": 0
+				},
 				"timers": {
 					"decelerate": {
 						"running": false,
 						"time": 0,
-						"max": 500,
+						"max": 25,
 						"script": "./scripts/decelerate"
 					}
 				},
 				"angle_mod": 0.0175,
 				"speed": 0.25,
 				"friction": {
-					"x": 0.5,
-					"y": 0.5
+					"x": 0.987,
+					"y": 0.987
 				},
 				"rotation": {
 					"angle": 0
@@ -9530,10 +9545,6 @@
 			},
 			{
 				"name": "splat-ecs/lib/systems/draw-image",
-				"scenes": "all"
-			},
-			{
-				"name": "splat-ecs/lib/systems/draw-rectangles",
 				"scenes": "all"
 			},
 			{

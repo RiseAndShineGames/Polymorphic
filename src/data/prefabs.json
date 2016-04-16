@@ -1,10 +1,9 @@
 {
-	"food":{
+	"food": {
 		"name":"food",
 		"food": true,
         "strokeStyle": "black",
         "type": 0,
-        "value": 0,
 		"position": {
 			"x": 0,
 			"y": 0
@@ -17,6 +16,70 @@
             "name": "BabyFood.png"
         },
 		"collisions": []
-	}
-
+	},
+    "baby_particle": {
+        "position": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 20,
+            "height": 20
+        },
+        "image": {
+            "name": "babyparticles.png"
+        }
+    },
+    "red_particle": {
+        "position": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 20,
+            "height": 20
+        },
+        "image": {
+            "name": "RedParticle.png"
+        }
+    },
+    "blue_particle": {
+        "position": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 20,
+            "height": 20
+        },
+        "image": {
+            "name": "BlueParticle.png"
+        }
+    },
+    "green_particle": {
+        "position": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 20,
+            "height": 20
+        },
+        "image": {
+            "name": "GreenParticle.png"
+        }
+    },
+    "yellow_particle": {
+        "position": {
+            "x": 0,
+            "y": 0
+        },
+        "size": {
+            "width": 20,
+            "height": 20
+        },
+        "image": {
+            "name": "YellowParticle.png"
+        }
+    }
 }
