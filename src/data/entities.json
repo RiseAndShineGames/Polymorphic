@@ -40,7 +40,8 @@
             "player": true,
             "position": {
                 "x": 100,
-                "y": 100
+                "y": 100,
+                "z": 1
             },
             "size": {
                 "width": 130,
@@ -57,6 +58,9 @@
                 "loop": true,
                 "speed": 1,
                 "name": "swim"
+            },
+            "constrainPosition": {
+                "id": 3
             }
         },
         {
@@ -72,6 +76,25 @@
                 "height": 60
             },
             "collisions": []
+        },
+        {
+            "id": 3,
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
+            "size": {
+                "width": 3840,
+                "height": 2880
+            },
+            "image": {
+                "name": "training.jpg",
+                "sourceWidth": 1280,
+                "sourceHeight": 960,
+                "destinationWidth": 3840,
+                "destinationHeight": 2880
+            }
         }
     ]
 }
