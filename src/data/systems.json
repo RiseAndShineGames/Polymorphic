@@ -33,6 +33,10 @@
             "scenes": "all"
         },
         {
+            "name": "splat-ecs/lib/systems/constrain-position",
+            "scenes": "all"
+        },
+        {
             "name": "splat-ecs/lib/systems/box-collider",
             "scenes": "all"
         },

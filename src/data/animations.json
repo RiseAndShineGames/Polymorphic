@@ -8,7 +8,10 @@
                 "sourceX": 0,
                 "sourceY": 0,
                 "sourceWidth": 7657,
-                "sourceHeight": 113
+                "sourceHeight": 113,
+                "destinationWidth": 130,
+                "destinationHeight": 60,
+                "destinationY": 30
             }
         }
     }]

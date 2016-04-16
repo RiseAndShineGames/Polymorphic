@@ -45,9 +45,9 @@
             },
             "size": {
                 "width": 130,
-                "height": 60
+                "height": 130
             },
-            "angle_mod": 0.0125,
+            "angle_mod": 0.0175,
             "speed": 0.25,
             "rotation": {
                 "angle": 0
