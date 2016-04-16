@@ -73,7 +73,7 @@
                 "time": 0,
                 "frame": 0,
                 "loop": true,
-                "speed": 1,
+                "speed": 0,
                 "name": "swim"
             },
             "constrainPosition": {

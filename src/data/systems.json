@@ -37,6 +37,10 @@
             "scenes": "all"
         },
         {
+            "name": "splat-ecs/lib/systems/decay-life-span",
+            "scenes": "all"
+        },
+        {
             "name": "splat-ecs/lib/systems/follow-parent",
             "scenes": "all"
         },

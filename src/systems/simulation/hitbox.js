@@ -1,6 +1,18 @@
 "use strict";
 
-var follow, angle, entitySize, otherSize, otherPos, collisions, other, i, camera = 0; // eslint-disable-line no-unused-vars
+var particles = require("../../../node_modules/splat-ecs/lib/particles.js");
+var config = new particles.Config();
+config.prefab = "baby_particle";
+config.qtyMin = 3;
+config.qtyMax = 6;
+config.velocityMin = 0.05;
+config.velocityMax = 0.10;
+config.sizeMin = 0.5;
+config.arcWidth = Math.PI * 2;
+config.lifeSpanMin = 500;
+config.lifeSpanMax = 750;
+
+var follow, angle, entitySize, otherSize, otherPos, collisions, other, i, camera = 0, player = 1; // eslint-disable-line no-unused-vars
 
 function newPosition(entity, other, game) {
     angle = game.entities.get(other, "rotation").angle;
@@ -20,8 +32,10 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
         collisions = game.entities.get(entity, "collisions");
         for (i = 0; i < collisions.length; ++i) {
             other = collisions[i];
+            config.origin = other;
+            particles.create(game, config);
             game.entities.destroy(other);
-            game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });
+            //game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });
         }
     }, "player_hitbox");
 };
