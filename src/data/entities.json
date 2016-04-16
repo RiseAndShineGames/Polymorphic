@@ -20,7 +20,7 @@
               "end_level": {
                 "running": true,
                 "time": 0,
-                "max": 120000,
+                "max": 30000,
                 "script": "./scripts/advance_game"
               }
             },

@@ -3,6 +3,8 @@
 		"name":"food",
 		"food": true,
         "strokeStyle": "black",
+        "type": 0,
+        "value": 0,
 		"position": {
 			"x": 0,
 			"y": 0
