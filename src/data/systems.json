@@ -83,6 +83,10 @@
             "scenes": "all"
         },
         {
+            "name": "splat-ecs/lib/systems/draw-rectangles",
+            "scenes": "all"
+        },
+        {
             "name": "splat-ecs/lib/systems/viewport-reset",
             "scenes": "all"
         },

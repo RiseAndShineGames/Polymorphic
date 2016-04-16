@@ -14,5 +14,21 @@
                 "destinationY": 30
             }
         }
+    }],
+    "polywag": [{
+        "filmstripFrames": 31,
+        "time": 30,
+        "properties": {
+            "image": {
+                "name": "polywag.png",
+                "sourceX": 0,
+                "sourceY": 0,
+                "sourceWidth": 11439,
+                "sourceHeight": 502,
+                "destinationWidth": 251,
+                "destinationHeight": 185,
+                "destinationY": 0
+            }
+        }
     }]
 }

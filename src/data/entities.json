@@ -45,8 +45,8 @@
                 "z": 1
             },
             "size": {
-                "width": 130,
-                "height": 130
+                "width": 251,
+                "height": 185
             },
             "velocity": {
                 "x": 0,
@@ -74,7 +74,7 @@
                 "frame": 0,
                 "loop": true,
                 "speed": 0,
-                "name": "swim"
+                "name": "polywag"
             },
             "constrainPosition": {
                 "id": 3
