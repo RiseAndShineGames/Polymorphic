@@ -36,8 +36,8 @@
                 "height": 121
             },
             "collisions": [],
-            "angle_mod": 0.01,
-            "speed": 0.1,
+            "angle_mod": 0.0125,
+            "speed": 0.25,
             "rotation": {
                 "angle": 0
             },
