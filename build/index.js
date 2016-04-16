@@ -78,11 +78,11 @@
 	var imageContext = __webpack_require__(96);
 	var imageManifest = generateManifest(imageContext.keys(), "images");
 
-	var soundContext = __webpack_require__(100);
+	var soundContext = __webpack_require__(103);
 	var soundManifest = generateManifest(soundContext.keys(), "sounds");
 
 	var localDataPath = "./data";
-	var localDataRequire = __webpack_require__(101);
+	var localDataRequire = __webpack_require__(104);
 
 	function customRequire(path) {
 	  if (path.indexOf(splatSystemPath) === 0) {
@@ -9063,9 +9063,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./logo.png": 97,
-		"./player.png": 98,
-		"./tadpoleanimate.png": 99
+		"./BabyFood.png": 97,
+		"./bg.jpg": 98,
+		"./logo.png": 99,
+		"./player.png": 100,
+		"./tadpoleanimate.png": 101,
+		"./training.jpg": 102
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -9085,22 +9088,40 @@
 /* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/logo.png";
+	module.exports = __webpack_require__.p + "images/BabyFood.png";
 
 /***/ },
 /* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/player.png";
+	module.exports = __webpack_require__.p + "images/bg.jpg";
 
 /***/ },
 /* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/tadpoleanimate.png";
+	module.exports = __webpack_require__.p + "images/logo.png";
 
 /***/ },
 /* 100 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/player.png";
+
+/***/ },
+/* 101 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/tadpoleanimate.png";
+
+/***/ },
+/* 102 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/training.jpg";
+
+/***/ },
+/* 103 */
 /***/ function(module, exports) {
 
 	function webpackContext(req) {
@@ -9109,20 +9130,20 @@
 	webpackContext.keys = function() { return []; };
 	webpackContext.resolve = webpackContext;
 	module.exports = webpackContext;
-	webpackContext.id = 100;
+	webpackContext.id = 103;
 
 
 /***/ },
-/* 101 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./animations.json": 102,
-		"./entities.json": 103,
-		"./inputs.json": 104,
-		"./prefabs.json": 105,
-		"./scenes.json": 106,
-		"./systems.json": 107
+		"./animations.json": 105,
+		"./entities.json": 106,
+		"./inputs.json": 107,
+		"./prefabs.json": 108,
+		"./scenes.json": 109,
+		"./systems.json": 110
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -9135,11 +9156,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 101;
+	webpackContext.id = 104;
 
 
 /***/ },
-/* 102 */
+/* 105 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9161,7 +9182,7 @@
 	};
 
 /***/ },
-/* 103 */
+/* 106 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9206,7 +9227,8 @@
 				"player": true,
 				"position": {
 					"x": 100,
-					"y": 100
+					"y": 100,
+					"z": 1
 				},
 				"size": {
 					"width": 130,
@@ -9223,6 +9245,9 @@
 					"loop": true,
 					"speed": 1,
 					"name": "swim"
+				},
+				"constrainPosition": {
+					"id": 3
 				}
 			},
 			{
@@ -9238,12 +9263,31 @@
 					"height": 60
 				},
 				"collisions": []
+			},
+			{
+				"id": 3,
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"size": {
+					"width": 3840,
+					"height": 2880
+				},
+				"image": {
+					"name": "training.jpg",
+					"sourceWidth": 1280,
+					"sourceHeight": 960,
+					"destinationWidth": 3840,
+					"destinationHeight": 2880
+				}
 			}
 		]
 	};
 
 /***/ },
-/* 104 */
+/* 107 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9307,7 +9351,7 @@
 	};
 
 /***/ },
-/* 105 */
+/* 108 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9319,15 +9363,18 @@
 				"y": 0
 			},
 			"size": {
-				"width": 10,
-				"height": 10
+				"width": 40,
+				"height": 40
+			},
+			"image": {
+				"name": "BabyFood.png"
 			},
 			"collisions": []
 		}
 	};
 
 /***/ },
-/* 106 */
+/* 109 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9339,7 +9386,7 @@
 	};
 
 /***/ },
-/* 107 */
+/* 110 */
 /***/ function(module, exports) {
 
 	module.exports = {
