@@ -50,20 +50,20 @@
 	var context = canvas.getContext("2d");
 
 	var Splat = __webpack_require__(1);
-	__webpack_require__(45);
+	__webpack_require__(46);
 
 
 	// This is some webpack magic to ensure the dynamically required scripts are loaded
 
 	var splatSystemPath = "splat-ecs/lib/systems";
 	// WARNING: can't use splatSystemPath variable here, or webpack won't pick it up
-	var splatSystemRequire = __webpack_require__(46);
+	var splatSystemRequire = __webpack_require__(47);
 
 	var localSystemPath = "./systems";
-	var localSystemRequire = __webpack_require__(86);
+	var localSystemRequire = __webpack_require__(87);
 
 	var localScriptPath = "./scripts";
-	var localScriptRequire = __webpack_require__(90);
+	var localScriptRequire = __webpack_require__(91);
 
 	function generateManifest(files, folder) {
 	  return files.reduce(function(manifest, file) {
@@ -73,16 +73,16 @@
 	  }, {});
 	}
 
-	__webpack_require__(96);
+	__webpack_require__(97);
 
-	var imageContext = __webpack_require__(97);
+	var imageContext = __webpack_require__(98);
 	var imageManifest = generateManifest(imageContext.keys(), "images");
 
-	var soundContext = __webpack_require__(104);
+	var soundContext = __webpack_require__(114);
 	var soundManifest = generateManifest(soundContext.keys(), "sounds");
 
 	var localDataPath = "./data";
-	var localDataRequire = __webpack_require__(105);
+	var localDataRequire = __webpack_require__(115);
 
 	function customRequire(path) {
 	  if (path.indexOf(splatSystemPath) === 0) {
@@ -152,22 +152,22 @@
 		openUrl: __webpack_require__(30),
 		NinePatch: __webpack_require__(31),
 		Particles: __webpack_require__(32),
-		saveData: __webpack_require__(33),
+		saveData: __webpack_require__(34),
 		Scene: __webpack_require__(16),
 		SoundLoader: __webpack_require__(24),
 
 		components: {
-			animation: __webpack_require__(34),
-			camera: __webpack_require__(35),
-			friction: __webpack_require__(36),
-			image: __webpack_require__(37),
-			movement2d: __webpack_require__(38),
-			playableArea: __webpack_require__(39),
-			playerController2d: __webpack_require__(40),
-			position: __webpack_require__(41),
-			size: __webpack_require__(42),
-			timers: __webpack_require__(43),
-			velocity: __webpack_require__(44)
+			animation: __webpack_require__(35),
+			camera: __webpack_require__(36),
+			friction: __webpack_require__(37),
+			image: __webpack_require__(38),
+			movement2d: __webpack_require__(39),
+			playableArea: __webpack_require__(40),
+			playerController2d: __webpack_require__(41),
+			position: __webpack_require__(42),
+			size: __webpack_require__(43),
+			timers: __webpack_require__(44),
+			velocity: __webpack_require__(45)
 		}
 	};
 
@@ -3682,100 +3682,238 @@
 
 /***/ },
 /* 32 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
+	/** @module splat-ecs/lib/particles */
 
-	function Particles(max, setupParticle, drawParticle) {
-		this.particles = [];
-		this.setupParticle = setupParticle;
-		this.drawParticle = drawParticle;
-		for (var i = 0; i < max; i++) {
-			var particle = {
-				x: 0,
-				y: 0,
-				vx: 0,
-				vy: 0,
-				enabled: false,
-				age: 0
-			};
-			this.setupParticle(particle);
-			this.particles.push(particle);
+	var random = __webpack_require__(33);
+
+	module.exports = {
+		/**
+		* Create between {@link module:splat-ecs/lib/particles.Config#qtyMin qtyMin} and {@link module:splat-ecs/lib/particles.Config#qtyMax qtyMax} particles, and randomize their properties according to <code>config</config>.
+		* @param {object} game The <code>game</code> object that you get in systems and scripts.
+		* @param {module:splat-ecs/lib/particles.Config} config The settings to use to create the particles.
+		*/
+		"create": function(game, config) {
+			var particleCount = Math.floor(random.inRange(config.qtyMin, config.qtyMax));
+			for (var i = 0; i < particleCount; i++) {
+				var particle = game.instantiatePrefab(config.prefab);
+				// check if origin is an entity
+				var origin = config.origin;
+				if (typeof config.origin === "number") {
+					origin = choosePointInEntity(game, origin);
+				}
+
+				var randomSize = random.inRange(config.sizeMin, config.sizeMax);
+				scaleEntityRect(game, particle, randomSize);
+
+				centerEntityOnPoint(game, particle, origin);
+
+				var velocity = random.inRange(config.velocityMin, config.velocityMax);
+
+				var angle = pickAngle(config, i, particleCount);
+				game.entities.set(particle, "velocity", pointOnCircle(angle, velocity));
+
+				if (config.accelerationX || config.accelerationY) {
+					game.entities.set(particle, "acceleration", {
+						"x": config.accelerationX,
+						"y": config.accelerationY
+					});
+				}
+				game.entities.set(particle, "lifeSpan", {
+					"current": 0,
+					"max": random.inRange(config.lifeSpanMin, config.lifeSpanMax)
+				});
+			}
+		},
+
+		/**
+		* The settings for a type of particle.
+		* @constructor
+		* @param {string} prefab The name of a prefab to instantiate for the particle, as defined in <code>prefabs.json</code>.
+		*/
+		"Config": function(prefab) {
+			/**
+			* The name of a prefab to instantiate for the particle, as defined in <code>prefabs.json</code>.
+			* @member {string}
+			*/
+			this.prefab = prefab;
+			/**
+			* The origin point in which to create particles.
+			*
+			* If the origin is a number it represents an entity and a random point inside the entity will be used.
+			* If origin is a point like <code>{"x": 50, "y": 50}</code> particles will spawn at that position.
+			* @member {object | number}
+			*/
+			this.origin = { "x": 0, "y": 0 };
+			/**
+			* How to distribute particles along the {@link module:splat-ecs/lib/particles.Config#arcWidth arcWidth}.
+			*
+			* Possible values:
+			* <dl>
+			* <dt><code>"even"</code></dt>
+			* <dd>Distribute the particles evenly along the arc.</dd>
+			* <dt><code>"random"</code></dt>
+			* <dd>Scatter the particles on random points of the arc.</dd>
+			* </dl>
+			* @member {string}
+			*/
+			this.spreadType = "random";
+			/**
+			* The direction (an angle in radians) that the particles should move.
+			* @member {number}
+			*/
+			this.angle = 0;
+			/**
+			* The width of an arc (represented by an angle in radians) to spread the particles. The arc is centered around {@link module:splat-ecs/lib/particles.Config#angle angle}.
+			* @member {number}
+			*/
+			this.arcWidth = Math.PI / 2;
+			/**
+			* The minimum number of particles to create.
+			* @member {number}
+			*/
+			this.qtyMin = 1;
+			/**
+			* The maximum number of particles to create.
+			* @member {number}
+			*/
+			this.qtyMax = 1;
+			/**
+			* The minimum percentage to scale each particle.
+			* <ul>
+			* <li>A scale of 0.5 means the particle will spawn at 50% (half) of the original size.</li>
+			* <li>A scale of 1 means the particle will spawn at the original size.</li>
+			* <li>A scale of 2 means the particle will spawn at 200% (double) the original size.</li>
+			* </ul>
+			* @member {number}
+			*/
+			this.sizeMin = 1;
+			/**
+			* The maximum percentage to scale each particle.
+			* <ul>
+			* <li>A scale of 0.5 means the particle will spawn at 50% (half) of the original size.</li>
+			* <li>A scale of 1 means the particle will spawn at the original size.</li>
+			* <li>A scale of 2 means the particle will spawn at 200% (double) the original size.</li>
+			* </ul>
+			* @member {number}
+			*/
+			this.sizeMax = 1;
+			/**
+			* The minimum velocity to apply to each particle.
+			* @member {number}
+			*/
+			this.velocityMin = 0.5;
+			/**
+			* The maximum velocity to apply to each particle.
+			* @member {number}
+			*/
+			this.velocityMax = 0.5;
+			/**
+			* The acceleration on the x-axis to apply to each particle.
+			* @member {number}
+			*/
+			this.accelerationX = 0;
+			/**
+			* The acceleration on the y-axis to apply to each particle.
+			* @member {number}
+			*/
+			this.accelerationY = 0;
+			/**
+			* The minimum life span to apply to each particle.
+			* @member {number}
+			*/
+			this.lifeSpanMin = 0;
+			/**
+			* The maximum life span to apply to each particle.
+			* @member {number}
+			*/
+			this.lifeSpanMax = 500;
 		}
-		this.gravity = 0.1;
-		this.maxAge = 1000;
+	};
+
+	function pickAngle(config, particleNumber, particleCount) {
+		var startAngle = config.angle - (config.arcWidth / 2);
+		if (config.spreadType === "even") {
+			return (particleNumber * (config.arcWidth / (particleCount - 1))) + startAngle;
+		} else {
+			var endAngle = startAngle + config.arcWidth;
+			return random.inRange(startAngle, endAngle);
+		}
 	}
-	Particles.prototype.move = function(elapsedMillis) {
-		for (var i = 0; i < this.particles.length; i++) {
-			var particle = this.particles[i];
-			if (!particle.enabled) {
-				continue;
-			}
-			particle.age += elapsedMillis;
-			if (particle.age > this.maxAge) {
-				particle.enabled = false;
-				continue;
-			}
-			particle.x += particle.vx * elapsedMillis;
-			particle.y += particle.vy * elapsedMillis;
-			particle.vy += this.gravity;
-		}
-	};
-	Particles.prototype.draw = function(context) {
-		for (var i = 0; i < this.particles.length; i++) {
-			var particle = this.particles[i];
-			if (!particle.enabled) {
-				continue;
-			}
-			this.drawParticle(context, particle);
-		}
-	};
-	Particles.prototype.add = function(quantity, x, y, velocity, config) {
-		var self = this;
-		function setupParticle(particle) {
-			particle.enabled = true;
-			particle.age = 0;
-			particle.x = x;
-			particle.y = y;
-			particle.vx = (Math.random() - 0.5) * velocity;
-			particle.vy = (Math.random() - 0.5) * velocity;
-			self.setupParticle(particle, config);
-		}
 
-		var particle;
-		for (var i = 0; i < this.particles.length; i++) {
-			particle = this.particles[i];
-			if (particle.enabled) {
-				continue;
-			}
-			if (quantity < 1) {
-				return;
-			}
-			quantity--;
-			setupParticle(particle);
-		}
+	function scaleEntityRect(game, entity, scaleFactor) {
+		var size = game.entities.get(entity, "size");
+		size.width = size.width * scaleFactor;
+		size.height = size.height * scaleFactor;
+	}
 
-		// sort oldest first
-		this.particles.sort(function(a, b) {
-			return b.age - a.age;
-		});
+	function pointOnCircle(angle, radius) {
+		return {
+			"x": (radius * Math.cos(angle)),
+			"y": (radius * Math.sin(angle))
+		};
+	}
 
-		for (i = 0; i < quantity; i++) {
-			particle = this.particles[i];
-			setupParticle(particle);
+	/**
+	* Center an entity on a given point.
+	* @private
+	* @param {object} game Required for game.entities.get().
+	* @param {integer} entity The id of entity to center.
+	* @param {object} point A point object <code>{"x": 50, "y": 50}</code> on which to center the entity.
+	*/
+	function centerEntityOnPoint(game, entity, point) {
+		var size = game.entities.get(entity, "size");
+		if (!game.entities.get(entity, "position")) {
+			game.entities.set(entity, "position", { "x": 0, "y": 0 });
 		}
-	};
-	Particles.prototype.reset = function() {
-		for (var i = 0; i < this.particles.length; i++) {
-			this.particles[i].enabled = false;
-		}
-	};
+		var position = game.entities.get(entity, "position");
+		position.x = point.x - (size.width / 2);
+		position.y = point.y - (size.height / 2);
+	}
 
-	module.exports = Particles;
+	/**
+	* Choose a random point inside the bounding rectangle of an entity.
+	* @private
+	* @param {object} game Required for game.entities.get().
+	* @param {integer} entity The id of entity to pick a point within.
+	* @returns {object} an point object <code>{"x": 50, "y": 50}</code>.
+	*/
+	function choosePointInEntity(game, entity) {
+		var position = game.entities.get(entity, "position");
+		var size = game.entities.get(entity, "size");
+		if (size === undefined) {
+			return {
+				"x": position.x,
+				"y": position.y
+			};
+		}
+		return {
+			"x": random.inRange(position.x, (position.x + size.width)),
+			"y": random.inRange(position.y, (position.y + size.height))
+		};
+	}
 
 
 /***/ },
 /* 33 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	module.exports = {
+		"inRange": function(min, max) {
+			return min + Math.random() * (max - min);
+		},
+		"from": function(array) {
+			return array[Math.floor(Math.random() * array.length)];
+		}
+	};
+
+
+/***/ },
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -3906,7 +4044,7 @@
 
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3923,7 +4061,7 @@
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3934,7 +4072,7 @@
 
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3945,7 +4083,7 @@
 
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3966,7 +4104,7 @@
 
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -3990,7 +4128,7 @@
 
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4001,7 +4139,7 @@
 
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4012,7 +4150,7 @@
 
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports) {
 
 	/**
@@ -4027,7 +4165,7 @@
 
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports) {
 
 	/**
@@ -4040,7 +4178,7 @@
 
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports) {
 
 	/**
@@ -4061,7 +4199,7 @@
 
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports) {
 
 	/**
@@ -4074,40 +4212,41 @@
 
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "index.html";
 
 /***/ },
-/* 46 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./advance-animations.js": 47,
-		"./advance-timers.js": 48,
-		"./apply-acceleration.js": 49,
-		"./apply-friction.js": 50,
-		"./apply-movement-2d.js": 51,
-		"./apply-shake.js": 52,
+		"./advance-animations.js": 48,
+		"./advance-timers.js": 49,
+		"./apply-acceleration.js": 50,
+		"./apply-friction.js": 51,
+		"./apply-movement-2d.js": 52,
+		"./apply-shake.js": 53,
 		"./apply-velocity.js": 54,
 		"./box-collider.js": 55,
 		"./center-position.js": 70,
 		"./clear-screen.js": 71,
 		"./constrain-position.js": 72,
 		"./control-player.js": 73,
-		"./draw-frame-rate.js": 74,
-		"./draw-image.js": 75,
-		"./draw-rectangles.js": 76,
-		"./follow-parent.js": 77,
-		"./match-aspect-ratio.js": 78,
-		"./match-canvas-size.js": 79,
-		"./match-center-x.js": 80,
-		"./match-center-y.js": 81,
-		"./match-parent.js": 82,
-		"./revert-shake.js": 83,
-		"./viewport-move-to-camera.js": 84,
-		"./viewport-reset.js": 85
+		"./decay-life-span.js": 74,
+		"./draw-frame-rate.js": 75,
+		"./draw-image.js": 76,
+		"./draw-rectangles.js": 77,
+		"./follow-parent.js": 78,
+		"./match-aspect-ratio.js": 79,
+		"./match-canvas-size.js": 80,
+		"./match-center-x.js": 81,
+		"./match-center-y.js": 82,
+		"./match-parent.js": 83,
+		"./revert-shake.js": 84,
+		"./viewport-move-to-camera.js": 85,
+		"./viewport-reset.js": 86
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -4120,11 +4259,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 46;
+	webpackContext.id = 47;
 
 
 /***/ },
-/* 47 */
+/* 48 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4200,7 +4339,7 @@
 
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4236,7 +4375,7 @@
 
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4253,7 +4392,7 @@
 
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4270,7 +4409,7 @@
 
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -4297,12 +4436,12 @@
 
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var random = __webpack_require__(53);
+	var random = __webpack_require__(33);
 
 	module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
 		game.entities.registerSearch("applyShakeSearch",["shake", "position"]);
@@ -4331,22 +4470,6 @@
 			my /= 2;
 			position.y += random.inRange(-my, my);
 		}, "applyShakeSearch");
-	};
-
-
-/***/ },
-/* 53 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	module.exports = {
-		"inRange": function(min, max) {
-			return min + Math.random() * (max - min);
-		},
-		"from": function(array) {
-			return array[Math.floor(Math.random() * array.length)];
-		}
 	};
 
 
@@ -8439,6 +8562,23 @@
 
 	"use strict";
 
+	module.exports = function(ecs, game) {
+		ecs.addEach(function decayLifeSpan(entity, elapsed) {
+			var lifeSpan = game.entities.get(entity, "lifeSpan");
+			lifeSpan.current += elapsed;
+			if (lifeSpan.current >= lifeSpan.max) {
+				game.entities.destroy(entity);
+			}
+		}, "lifeSpan");
+	};
+
+
+/***/ },
+/* 75 */
+/***/ function(module, exports) {
+
+	"use strict";
+
 	function roundRect(context, x, y, width, height, radius, stroke) {
 		if (typeof stroke == "undefined") {
 			stroke = true;
@@ -8493,7 +8633,7 @@
 
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8596,7 +8736,7 @@
 
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8616,7 +8756,7 @@
 
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8665,7 +8805,7 @@
 
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8694,7 +8834,7 @@
 
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8716,7 +8856,7 @@
 
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8743,7 +8883,7 @@
 
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8770,7 +8910,7 @@
 
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8787,14 +8927,15 @@
 
 			game.entities.set(entity, "position", {
 				x: parentPosition.x + match.offsetX,
-				y: parentPosition.y + match.offsetY
+				y: parentPosition.y + match.offsetY,
+				z: parentPosition.z + match.offsetZ
 			});
 		}, "matchParent");
 	};
 
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8811,7 +8952,7 @@
 
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8830,7 +8971,7 @@
 
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8843,13 +8984,13 @@
 
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./renderer/sample-renderer-system.js": 87,
-		"./simulation/hitbox.js": 88,
-		"./simulation/sample-simulation-system.js": 89
+		"./renderer/sample-renderer-system.js": 88,
+		"./simulation/hitbox.js": 89,
+		"./simulation/sample-simulation-system.js": 90
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -8862,11 +9003,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 86;
+	webpackContext.id = 87;
 
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8878,12 +9019,24 @@
 
 
 /***/ },
-/* 88 */
-/***/ function(module, exports) {
+/* 89 */
+/***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var follow, angle, entitySize, otherSize, otherPos, collisions, other, i, camera = 0; // eslint-disable-line no-unused-vars
+	var particles = __webpack_require__(32);
+	var config = new particles.Config();
+	config.qtyMin = 3;
+	config.qtyMax = 6;
+	config.velocityMin = 0.05;
+	config.velocityMax = 0.10;
+	config.sizeMin = 0.5;
+	config.arcWidth = Math.PI * 2;
+	config.lifeSpanMin = 500;
+	config.lifeSpanMax = 750;
+
+	var follow, angle, entitySize, otherSize, otherPos, collisions, other, i, otherVal, otherType, indicatorType, camera = 0, player = 1, indicator = 4; // eslint-disable-line no-unused-vars
+
 
 	function newPosition(entity, other, game) {
 	    angle = game.entities.get(other, "rotation").angle;
@@ -8895,23 +9048,45 @@
 	        "y": otherPos.y + (otherSize.height / 2) - (entitySize.height / 2) + ((Math.sin(angle) * otherSize.height / 4))
 	    };
 	}
-
 	module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
 	    ecs.addEach(function(entity, elapsed) { // eslint-disable-line no-unused-vars
 	        follow = game.entities.get(entity, "hitbox_for");
 	        game.entities.set(entity, "position", newPosition(entity, follow, game));
 	        collisions = game.entities.get(entity, "collisions");
+	        indicatorType = game.entities.get(indicator,"type");
 	        for (i = 0; i < collisions.length; ++i) {
 	            other = collisions[i];
+	            otherType = game.entities.get(other,"type");
+	            switch (otherType) {
+	                case 1:
+	                    config.prefab = "yellow_particle";
+	                    break;
+	                case 2:
+	                    config.prefab = "green_particle";
+	                    break;
+	                case 3:
+	                    config.prefab = "blue_particle";
+	                    break;
+	                case 4:
+	                    config.prefab = "red_particle";
+	                    break;
+	                default:
+	                config.prefab = "baby_particle";
+	            }
+	            otherVal = 1;
+	            otherVal = (otherType === indicatorType ? otherVal : otherVal * -1);
+	            game.entities.set(camera,"round_score",game.entities.get(camera,"round_score") + otherVal);
+	            config.origin = other;
+	            particles.create(game, config);
 	            game.entities.destroy(other);
-	            game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });
+	            //game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });
 	        }
 	    }, "player_hitbox");
 	};
 
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8950,15 +9125,15 @@
 
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./advance_game.js": 91,
-		"./decelerate.js": 92,
-		"./main-enter.js": 93,
-		"./main-exit.js": 94,
-		"./spawn_food.js": 95
+		"./advance_game.js": 92,
+		"./decelerate.js": 93,
+		"./main-enter.js": 94,
+		"./main-exit.js": 95,
+		"./spawn_food.js": 96
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -8971,11 +9146,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 90;
+	webpackContext.id = 91;
 
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9000,7 +9175,7 @@
 
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9027,17 +9202,18 @@
 
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports) {
 
 	"use strict";
 
 	module.exports = function(game) { // eslint-disable-line no-unused-vars
 		var scores = game.entities.get(0,"scores");
-		if (game.arguments["rounds"]) {
-			scores.round1 = game.arguments["rounds"].round1;
-			scores.round2 = game.arguments["rounds"].round2;
-			scores.round3 = game.arguments["rounds"].round3;
+		console.log(game.arguments);
+		if (game.arguments["scores"]) {
+			scores.round1 = game.arguments["scores"].round1;
+			scores.round2 = game.arguments["scores"].round2;
+			scores.round3 = game.arguments["scores"].round3;
 		} else {
 			scores.round1 = 0;
 			scores.round2 = 0;
@@ -9050,7 +9226,7 @@
 
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9060,17 +9236,43 @@
 
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports) {
 
 	"use strict";
-
+	var timers, food, position, bounds, type,round, image, container = 3, camera = 0;
 	module.exports = function(entity, game) { // eslint-disable-line no-unused-vars
-		var timers = game.entities.get(entity,"timers");
-		var food = game.instantiatePrefab("food");
-		var position = game.entities.get(food,"position");
-		position.x =  Math.floor(Math.random() * (game.canvas.width - 1)) + 1;
-		position.y =  Math.floor(Math.random() * (game.canvas.height - 1)) + 1;
+		timers = game.entities.get(entity,"timers");
+		food = game.instantiatePrefab("food");
+		position = game.entities.get(food,"position");
+		bounds = game.entities.get(container,"size");
+		round = game.entities.get(camera,"round");
+		image = game.entities.get(food,"image");
+		position.x =  Math.floor(Math.random() * (bounds.width - 1)) + 1;
+		position.y =  Math.floor(Math.random() * (bounds.height - 1)) + 1;
+
+		type =  Math.floor(Math.random() * 4) + 1;
+		game.entities.set(food,"type",type);
+		switch (round) {
+			case 0:
+				game.entities.set(food,"type",0);
+				break;
+			default:
+				switch (type) {
+					case 1:
+						image.name = "YellowFood.png";
+						break;
+					case 2:
+						image.name = "GreenFood.png";
+						break;
+					case 3:
+						image.name = "BlueFood.png";
+						break;
+					case 4:
+						image.name = "RedFood.png";
+						break;
+				}
+		}
 
 		timers["spawn_food"].time = 0;
 		timers["spawn_food"].running = true;
@@ -9078,7 +9280,7 @@
 
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports) {
 
 	function webpackContext(req) {
@@ -9086,32 +9288,6 @@
 	}
 	webpackContext.keys = function() { return []; };
 	webpackContext.resolve = webpackContext;
-	module.exports = webpackContext;
-	webpackContext.id = 96;
-
-
-/***/ },
-/* 97 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var map = {
-		"./BabyFood.png": 98,
-		"./bg.jpg": 99,
-		"./logo.png": 100,
-		"./player.png": 101,
-		"./tadpoleanimate.png": 102,
-		"./training.jpg": 103
-	};
-	function webpackContext(req) {
-		return __webpack_require__(webpackContextResolve(req));
-	};
-	function webpackContextResolve(req) {
-		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
-	};
-	webpackContext.keys = function webpackContextKeys() {
-		return Object.keys(map);
-	};
-	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
 	webpackContext.id = 97;
 
@@ -9120,62 +9296,22 @@
 /* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/BabyFood.png";
-
-/***/ },
-/* 99 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/bg.jpg";
-
-/***/ },
-/* 100 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/logo.png";
-
-/***/ },
-/* 101 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/player.png";
-
-/***/ },
-/* 102 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/tadpoleanimate.png";
-
-/***/ },
-/* 103 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/training.jpg";
-
-/***/ },
-/* 104 */
-/***/ function(module, exports) {
-
-	function webpackContext(req) {
-		throw new Error("Cannot find module '" + req + "'.");
-	}
-	webpackContext.keys = function() { return []; };
-	webpackContext.resolve = webpackContext;
-	module.exports = webpackContext;
-	webpackContext.id = 104;
-
-
-/***/ },
-/* 105 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var map = {
-		"./animations.json": 106,
-		"./entities.json": 107,
-		"./inputs.json": 108,
-		"./prefabs.json": 109,
-		"./scenes.json": 110,
-		"./systems.json": 111
+		"./BabyFood.png": 99,
+		"./BlueFood.png": 100,
+		"./BlueParticle.png": 101,
+		"./GreenFood.png": 102,
+		"./GreenParticle.png": 103,
+		"./RedFood.png": 104,
+		"./RedParticle.png": 105,
+		"./YellowFood.png": 106,
+		"./YellowParticle.png": 107,
+		"./babyparticles.png": 108,
+		"./bg.jpg": 109,
+		"./logo.png": 110,
+		"./player.png": 111,
+		"./tadpoleanimate.png": 112,
+		"./training.jpg": 113
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -9188,11 +9324,140 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 105;
+	webpackContext.id = 98;
 
 
 /***/ },
+/* 99 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/BabyFood.png";
+
+/***/ },
+/* 100 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/BlueFood.png";
+
+/***/ },
+/* 101 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/BlueParticle.png";
+
+/***/ },
+/* 102 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/GreenFood.png";
+
+/***/ },
+/* 103 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/GreenParticle.png";
+
+/***/ },
+/* 104 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/RedFood.png";
+
+/***/ },
+/* 105 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/RedParticle.png";
+
+/***/ },
 /* 106 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/YellowFood.png";
+
+/***/ },
+/* 107 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/YellowParticle.png";
+
+/***/ },
+/* 108 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/babyparticles.png";
+
+/***/ },
+/* 109 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/bg.jpg";
+
+/***/ },
+/* 110 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/logo.png";
+
+/***/ },
+/* 111 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/player.png";
+
+/***/ },
+/* 112 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/tadpoleanimate.png";
+
+/***/ },
+/* 113 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/training.jpg";
+
+/***/ },
+/* 114 */
+/***/ function(module, exports) {
+
+	function webpackContext(req) {
+		throw new Error("Cannot find module '" + req + "'.");
+	}
+	webpackContext.keys = function() { return []; };
+	webpackContext.resolve = webpackContext;
+	module.exports = webpackContext;
+	webpackContext.id = 114;
+
+
+/***/ },
+/* 115 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./animations.json": 116,
+		"./entities.json": 117,
+		"./inputs.json": 118,
+		"./prefabs.json": 119,
+		"./scenes.json": 120,
+		"./systems.json": 121
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 115;
+
+
+/***/ },
+/* 116 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9217,7 +9482,7 @@
 	};
 
 /***/ },
-/* 107 */
+/* 117 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9242,7 +9507,7 @@
 					"end_level": {
 						"running": true,
 						"time": 0,
-						"max": 120000,
+						"max": 30000,
 						"script": "./scripts/advance_game"
 					}
 				},
@@ -9295,7 +9560,7 @@
 					"time": 0,
 					"frame": 0,
 					"loop": true,
-					"speed": 1,
+					"speed": 0,
 					"name": "swim"
 				},
 				"constrainPosition": {
@@ -9339,6 +9604,7 @@
 				"id": 4,
 				"indicator": true,
 				"strokeStyle": "red",
+				"type": 0,
 				"position": {
 					"x": 0,
 					"y": 0,
@@ -9364,7 +9630,7 @@
 	};
 
 /***/ },
-/* 108 */
+/* 118 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9428,7 +9694,7 @@
 	};
 
 /***/ },
-/* 109 */
+/* 119 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9436,6 +9702,7 @@
 			"name": "food",
 			"food": true,
 			"strokeStyle": "black",
+			"type": 0,
 			"position": {
 				"x": 0,
 				"y": 0
@@ -9448,11 +9715,76 @@
 				"name": "BabyFood.png"
 			},
 			"collisions": []
+		},
+		"baby_particle": {
+			"position": {
+				"x": 0,
+				"y": 0
+			},
+			"size": {
+				"width": 20,
+				"height": 20
+			},
+			"image": {
+				"name": "babyparticles.png"
+			}
+		},
+		"red_particle": {
+			"position": {
+				"x": 0,
+				"y": 0
+			},
+			"size": {
+				"width": 20,
+				"height": 20
+			},
+			"image": {
+				"name": "RedParticle.png"
+			}
+		},
+		"blue_particle": {
+			"position": {
+				"x": 0,
+				"y": 0
+			},
+			"size": {
+				"width": 20,
+				"height": 20
+			},
+			"image": {
+				"name": "BlueParticle.png"
+			}
+		},
+		"green_particle": {
+			"position": {
+				"x": 0,
+				"y": 0
+			},
+			"size": {
+				"width": 20,
+				"height": 20
+			},
+			"image": {
+				"name": "GreenParticle.png"
+			}
+		},
+		"yellow_particle": {
+			"position": {
+				"x": 0,
+				"y": 0
+			},
+			"size": {
+				"width": 20,
+				"height": 20
+			},
+			"image": {
+				"name": "YellowParticle.png"
+			}
 		}
 	};
 
 /***/ },
-/* 110 */
+/* 120 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9464,7 +9796,7 @@
 	};
 
 /***/ },
-/* 111 */
+/* 121 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9503,6 +9835,10 @@
 			},
 			{
 				"name": "splat-ecs/lib/systems/match-center-x",
+				"scenes": "all"
+			},
+			{
+				"name": "splat-ecs/lib/systems/decay-life-span",
 				"scenes": "all"
 			},
 			{
