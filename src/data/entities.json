@@ -19,10 +19,17 @@
               "end_level": {
                 "running": true,
                 "time": 0,
-                "max": 180000,
-                "script": "./script/advance_game"
+                "max": 120000,
+                "script": "./scripts/advance_game"
               }
-            }
+            },
+            "scores": {
+              "round1":0,
+              "round2":0,
+              "round3":0
+            },
+            "round_score": 0,
+            "round":0
         },
         {
             "id": 1,
