@@ -29,6 +29,14 @@
             "scenes": "all"
         },
         {
+            "name": "splat-ecs/lib/systems/match-parent",
+            "scenes": "all"
+        },
+        {
+            "name": "splat-ecs/lib/systems/match-center-x",
+            "scenes": "all"
+        },
+        {
             "name": "splat-ecs/lib/systems/follow-parent",
             "scenes": "all"
         },

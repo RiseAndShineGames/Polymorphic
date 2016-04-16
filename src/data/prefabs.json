@@ -2,6 +2,7 @@
 	"food":{
 		"name":"food",
 		"food": true,
+        "strokeStyle": "black",
 		"position": {
 			"x": 0,
 			"y": 0

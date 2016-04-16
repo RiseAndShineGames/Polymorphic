@@ -1,6 +1,6 @@
 "use strict";
 
-var follow, angle, entitySize, otherSize, otherPos, collisions, other, i;
+var follow, angle, entitySize, otherSize, otherPos, collisions, other, i, camera = 0; // eslint-disable-line no-unused-vars
 
 function newPosition(entity, other, game) {
     angle = game.entities.get(other, "rotation").angle;
@@ -8,8 +8,8 @@ function newPosition(entity, other, game) {
     otherSize = game.entities.get(other, "size");
     otherPos = game.entities.get(other, "position");
     return {
-        "x": otherPos.x + (otherSize.width / 2) + ((Math.cos(angle) * otherSize.width / 4)) - (entitySize.width / 2),
-        "y": otherPos.y + (otherSize.height / 2) + ((Math.sin(angle) * otherSize.height / 4)) - (entitySize.height / 2)
+        "x": otherPos.x + (otherSize.width / 2) - (entitySize.width / 2) + ((Math.cos(angle) * otherSize.width / 4)) ,
+        "y": otherPos.y + (otherSize.height / 2) - (entitySize.height / 2) + ((Math.sin(angle) * otherSize.height / 4))
     };
 }
 
@@ -21,6 +21,7 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
         for (i = 0; i < collisions.length; ++i) {
             other = collisions[i];
             game.entities.destroy(other);
+            game.entities.set(camera, "shake", { "duration": 250, "magnitude": 10 });
         }
     }, "player_hitbox");
 };
