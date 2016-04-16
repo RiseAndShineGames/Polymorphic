@@ -20,7 +20,7 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
         collisions = game.entities.get(entity, "collisions");
         for (i = 0; i < collisions.length; ++i) {
             other = collisions[i];
-            other.destroy();
+            game.entities.destroy(other);
         }
     }, "player_hitbox");
 };
