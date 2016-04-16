@@ -23,6 +23,10 @@
                 "script": "./scripts/advance_game"
               }
             },
+            "follow": {
+                "id": 1,
+                "distance": 200
+            },
             "scores": {
               "round1":0,
               "round2":0,

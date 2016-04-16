@@ -8,7 +8,7 @@ function newPosition(entity, other, game) {
     otherSize = game.entities.get(other, "size");
     otherPos = game.entities.get(other, "position");
     return {
-        "x": otherPos.x + (otherSize.width / 2) + ((Math.cos(angle) * otherSize.width / 2)) - (entitySize.width / 2),
+        "x": otherPos.x + (otherSize.width / 2) + ((Math.cos(angle) * otherSize.width / 4)) - (entitySize.width / 2),
         "y": otherPos.y + (otherSize.height / 2) + ((Math.sin(angle) * otherSize.height / 2)) - (entitySize.height / 2)
     };
 }
