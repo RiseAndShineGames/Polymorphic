@@ -1,2 +1,15 @@
 {
+    "swim": [{
+        "filmstripFrames": 31,
+        "time": 15,
+        "properties": {
+            "image": {
+                "name": "tadpoleanimate.png",
+                "sourceX": 0,
+                "sourceY": 0,
+                "sourceWidth": 7657,
+                "sourceHeight": 113
+            }
+        }
+    }]
 }

@@ -8,6 +8,10 @@
                 "x": 0,
                 "y": 0
             },
+            "follow": {
+                "id": 1,
+                "distance": 200
+            },
             "matchCanvasSize": true
         },
         {
@@ -18,8 +22,8 @@
                 "y": 100
             },
             "size": {
-                "width": 260,
-                "height": 121
+                "width": 130,
+                "height": 60
             },
             "collisions": [],
             "angle_mod": 0.0125,
@@ -27,8 +31,12 @@
             "rotation": {
                 "angle": 0
             },
-            "image": {
-                "name": "player.png"
+            "animation": {
+                "time": 0,
+                "frame": 0,
+                "loop": true,
+                "speed": 1,
+                "name": "swim"
             }
         }
     ]
