@@ -48,19 +48,23 @@
                 "width": 130,
                 "height": 130
             },
+            "velocity": {
+                "x": 0,
+                "y": 0
+            },
             "timers": {
                 "decelerate": {
                     "running": false,
                     "time": 0,
-                    "max": 500,
+                    "max": 25,
                     "script": "./scripts/decelerate"
                 }
             },
             "angle_mod": 0.0175,
             "speed": 0.25,
             "friction": {
-                "x": 0.5,
-                "y": 0.5
+                "x": 0.987,
+                "y": 0.987
             },
             "rotation": {
                 "angle": 0

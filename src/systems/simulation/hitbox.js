@@ -21,7 +21,7 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
         for (i = 0; i < collisions.length; ++i) {
             other = collisions[i];
             game.entities.destroy(other);
-            game.entities.set(camera, "shake", { "duration": 250, "magnitude": 10 });
+            game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });
         }
     }, "player_hitbox");
 };

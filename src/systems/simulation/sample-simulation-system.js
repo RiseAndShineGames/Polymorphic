@@ -1,6 +1,6 @@
 "use strict";
 
-var velocity, rotation, animation;
+var velocity, newVel, rotation, animation, timers;
 
 function getVelocity(game, angle, speed) {
     return {
@@ -11,15 +11,18 @@ function getVelocity(game, angle, speed) {
 
 module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
     ecs.addEach(function(entity, elapsed) { // eslint-disable-line no-unused-vars
+        velocity = game.entities.get(entity, "velocity");
         rotation = game.entities.get(entity, "rotation");
         animation = game.entities.get(entity, "animation");
+        timers = game.entities.get(entity, "timers");
         if (game.inputs.button("go")) {
-            velocity = getVelocity(game, rotation.angle, game.entities.get(entity, "speed"));
-            game.entities.set(entity, "velocity", velocity);
+            newVel = getVelocity(game, rotation.angle, game.entities.get(entity, "speed"));
+            game.entities.set(entity, "velocity", newVel);
             animation.speed = 1;
         } else {
-            game.entities.set(entity, "velocity", { "x": 0, "y": 0 });
-            animation.speed = 0;
+            if (velocity.x != 0 && velocity.y != 0) {
+                timers.decelerate.running = true;
+            }
         }
         if (game.inputs.button("clockwise") && !game.inputs.button("counter_clockwise")) {
             rotation.angle += game.entities.get(entity, "angle_mod");
