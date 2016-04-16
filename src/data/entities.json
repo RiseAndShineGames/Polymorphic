@@ -8,10 +8,6 @@
                 "x": 0,
                 "y": 0
             },
-            "follow": {
-                "id": 1,
-                "distance": 200
-            },
             "matchCanvasSize": true
         },
         {
@@ -25,7 +21,6 @@
                 "width": 130,
                 "height": 60
             },
-            "collisions": [],
             "angle_mod": 0.0125,
             "speed": 0.25,
             "rotation": {
@@ -38,6 +33,20 @@
                 "speed": 1,
                 "name": "swim"
             }
+        },
+        {
+            "id": 2,
+            "player_hitbox": true,
+            "hitbox_for": 1,
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 30,
+                "height": 60
+            },
+            "collisions": []
         }
     ]
 }

@@ -39,6 +39,10 @@
         {
             "name": "./systems/simulation/sample-simulation-system",
             "scenes": "all"
+        },
+        {
+            "name": "./systems/simulation/hitbox",
+            "scenes": "all"
         }
     ],
     "renderer": [
