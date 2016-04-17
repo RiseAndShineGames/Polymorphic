@@ -1,6 +1,6 @@
 "use strict";
 
-var round, scores, roundScore;
+var round, final_score, scores, roundScore;
 
 module.exports = function(entity, game) { // eslint-disable-line no-unused-vars
 	round = game.entities.get(0,"round");
@@ -14,8 +14,14 @@ module.exports = function(entity, game) { // eslint-disable-line no-unused-vars
 		scores.round2 = roundScore;
 	}
 	if (round === 2) {
-		scores.round3 = roundScore;
-	}
-	round += 1;
-	game.switchScene("main", { "scores": scores,"round": round });
+        // TODO Use round based scoring instead. This is just for a final score
+        final_score = 0;
+        final_score += scores.round1;
+        final_score += scores.round2;
+        final_score += roundScore;
+        game.switchScene("end", { "final_score": final_score });
+	} else {
+        ++round;
+        game.switchScene("main", { "scores": scores,"round": round });
+    }
 };

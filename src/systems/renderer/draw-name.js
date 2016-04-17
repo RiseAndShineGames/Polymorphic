@@ -9,8 +9,8 @@ module.exports = function(ecs, game) {
         msg = game.entities.get(entity, "title");
 		msg_size = context.measureText(msg);
         context.font = "80px 'Teko'";
-		context.fillStyle = "#ffab31";
-		context.strokeStyle = "#fff";
+		context.fillStyle = "white";
+		context.strokeStyle = "#ffab31";
         context.lineWidth = 3;
         context.textBaseline = "middle";
         context.fillText(msg, pos.x + (size.width * 0.45) - msg_size.width, pos.y + size.height * 0.4);
