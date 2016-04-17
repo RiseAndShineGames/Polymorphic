@@ -24,10 +24,10 @@
                 "sourceX": 0,
                 "sourceY": 0,
                 "sourceWidth": 11439,
-                "sourceHeight": 502,
+                "sourceHeight": 369,
                 "destinationWidth": 251,
                 "destinationHeight": 185,
-                "destinationY": 0
+                "destinationY": -30
             }
         }
     }]

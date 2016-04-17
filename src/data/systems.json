@@ -94,15 +94,6 @@
             "name": "./systems/renderer/sample-renderer-system",
             "scenes": "all"
         },
-        
-        {
-            "name": "splat-ecs/lib/systems/draw-rectangles",
-            "scenes": "none"
-        },
-        {
-            "name": "splat-ecs/lib/systems/draw-rectangles",
-            "scenes": "all"
-        },
         {
             "name": "splat-ecs/lib/systems/viewport-reset",
             "scenes": "all"
