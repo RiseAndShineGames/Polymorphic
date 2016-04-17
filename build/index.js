@@ -63,7 +63,7 @@
 	var localSystemRequire = __webpack_require__(87);
 
 	var localScriptPath = "./scripts";
-	var localScriptRequire = __webpack_require__(95);
+	var localScriptRequire = __webpack_require__(96);
 
 	function generateManifest(files, folder) {
 	  return files.reduce(function(manifest, file) {
@@ -73,16 +73,16 @@
 	  }, {});
 	}
 
-	__webpack_require__(104);
+	__webpack_require__(111);
 
-	var imageContext = __webpack_require__(105);
+	var imageContext = __webpack_require__(112);
 	var imageManifest = generateManifest(imageContext.keys(), "images");
 
-	var soundContext = __webpack_require__(139);
+	var soundContext = __webpack_require__(161);
 	var soundManifest = generateManifest(soundContext.keys(), "sounds");
 
 	var localDataPath = "./data";
-	var localDataRequire = __webpack_require__(144);
+	var localDataRequire = __webpack_require__(169);
 
 	function customRequire(path) {
 	  if (path.indexOf(splatSystemPath) === 0) {
@@ -8989,12 +8989,13 @@
 
 	var map = {
 		"./renderer/crop-game.js": 88,
-		"./renderer/draw-timer.js": 89,
-		"./renderer/sample-renderer-system.js": 90,
-		"./simulation/hitbox.js": 91,
-		"./simulation/radar-system.js": 92,
-		"./simulation/sample-simulation-system.js": 93,
-		"./simulation/title.js": 94
+		"./renderer/draw-name.js": 89,
+		"./renderer/draw-timer.js": 90,
+		"./renderer/sample-renderer-system.js": 91,
+		"./simulation/hitbox.js": 92,
+		"./simulation/radar-system.js": 93,
+		"./simulation/sample-simulation-system.js": 94,
+		"./simulation/title.js": 95
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -9064,6 +9065,37 @@
 
 	"use strict";
 
+	var pos, size, msg, msg_size;
+
+	module.exports = function(ecs, game) {
+		ecs.addEach(function drawTimer(entity, context, elapsed) { // eslint-disable-line no-unused-vars
+	        pos = game.entities.get(entity, "position");
+	        size = game.entities.get(entity, "size");
+	        msg = game.entities.get(entity, "title");
+			msg_size = context.measureText(msg);
+	        context.font = "80px 'Teko'";
+			context.fillStyle = "white";
+			context.strokeStyle = "#ffab31";
+	        context.lineWidth = 3;
+	        context.textBaseline = "middle";
+	        context.fillText(msg, pos.x + (size.width * 0.45) - msg_size.width, pos.y + size.height * 0.4);
+	        context.strokeText(msg, pos.x + (size.width * 0.45) - msg_size.width, pos.y + size.height * 0.4);
+	        msg = game.entities.get(entity, "subtitle");
+			msg_size = context.measureText(msg);
+	        context.font = "55px 'Teko'";
+	        context.lineWidth = 2;
+	        context.fillText(msg, pos.x + (size.width * 0.7) - (msg_size.width * 0.5), pos.y + (size.height * 0.8));
+	        context.strokeText(msg, pos.x + (size.width * 0.7) - (msg_size.width * 0.5), pos.y + (size.height * 0.8));
+	    }, "frog_name");
+	};
+
+
+/***/ },
+/* 90 */
+/***/ function(module, exports) {
+
+	"use strict";
+
 	var pos, size, msg, msg_size, timer, camera = 0;
 
 	module.exports = function(ecs, game) {
@@ -9085,7 +9117,7 @@
 
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9162,7 +9194,7 @@
 
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9178,7 +9210,7 @@
 	config.lifeSpanMin = 500;
 	config.lifeSpanMax = 750;
 
-	var follow, angle, entitySize, otherSize, otherPos, collisions, other, i, otherVal, otherType, indicatorType, camera = 0, player = 1, indicator = 4, heart = 6; // eslint-disable-line no-unused-vars
+	var follow, angle, entitySize, otherSize, otherPos, collisions, round, other, i, indicatorImage, type, oldType, newType, otherVal, otherType, indicatorType, camera = 0, player = 1, indicator = 4, heart = 6; // eslint-disable-line no-unused-vars
 
 
 	function newPosition(entity, other, game) {
@@ -9203,6 +9235,9 @@
 	        game.entities.set(heart, "position", newPosition(heart, follow, game));
 	        collisions = game.entities.get(entity, "collisions");
 	        indicatorType = game.entities.get(indicator,"type");
+	        round = game.entities.get(camera, "round");
+	        indicatorImage = game.entities.get(indicator, "image");
+
 	        for (i = 0; i < collisions.length; ++i) {
 	            other = collisions[i];
 	            otherType = game.entities.get(other,"type");
@@ -9231,6 +9266,31 @@
 	            game.entities.destroy(other);
 	            if (otherType !== indicatorType) {
 	                game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });
+	            } else {
+	                oldType = indicatorType;
+	                newType = Math.floor(Math.random() * 4) + 1;
+	                game.entities.set(indicator,"type", (oldType !== newType ? newType : (newType % 4) + 1));
+	                type = game.entities.get(indicator,"type");
+	                switch (round) {
+	                    case 0:
+	                        game.entities.set(indicator,"type",0);
+	                        break;
+	                    default:
+	                        switch (type) {
+	                            case 1:
+	                                indicatorImage.name = "YellowFood.png";
+	                                break;
+	                            case 2:
+	                                indicatorImage.name = "GreenFood.png";
+	                                break;
+	                            case 3:
+	                                indicatorImage.name = "BlueFood.png";
+	                                break;
+	                            case 4:
+	                                indicatorImage.name = "RedFood.png";
+	                                break;
+	                        }
+	                }
 	            }
 	        }
 	    }, "player_hitbox");
@@ -9238,7 +9298,7 @@
 
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9309,7 +9369,7 @@
 
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9348,7 +9408,7 @@
 
 
 /***/ },
-/* 94 */
+/* 95 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9366,18 +9426,23 @@
 
 
 /***/ },
-/* 95 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./advance_game.js": 96,
-		"./change_indicator.js": 97,
-		"./decelerate.js": 98,
-		"./intro.js": 99,
-		"./main-enter.js": 100,
-		"./main-exit.js": 101,
-		"./spawn_food.js": 102,
-		"./title-enter.js": 103
+		"./advance_game.js": 97,
+		"./animate_name.js": 98,
+		"./change_image.js": 99,
+		"./change_indicator.js": 100,
+		"./decelerate.js": 101,
+		"./end-enter.js": 102,
+		"./intro.js": 104,
+		"./main-enter.js": 105,
+		"./main-exit.js": 106,
+		"./show_name.js": 107,
+		"./spawn_food.js": 108,
+		"./title-enter.js": 109,
+		"./title-exit.js": 110
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -9390,16 +9455,16 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 95;
+	webpackContext.id = 96;
 
 
 /***/ },
-/* 96 */
+/* 97 */
 /***/ function(module, exports) {
 
 	"use strict";
 
-	var round, scores, roundScore;
+	var round, final_score, scores, roundScore;
 
 	module.exports = function(entity, game) { // eslint-disable-line no-unused-vars
 		round = game.entities.get(0,"round");
@@ -9413,15 +9478,56 @@
 			scores.round2 = roundScore;
 		}
 		if (round === 2) {
-			scores.round3 = roundScore;
-		}
-		round += 1;
-		game.switchScene("main", { "scores": scores,"round": round });
+	        // TODO Use round based scoring instead. This is just for a final score
+	        final_score = 0;
+	        final_score += scores.round1;
+	        final_score += scores.round2;
+	        final_score += roundScore;
+	        game.switchScene("end", { "final_score": final_score });
+		} else {
+	        ++round;
+	        game.switchScene("main", { "scores": scores,"round": round });
+	    }
 	};
 
 
 /***/ },
-/* 97 */
+/* 98 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var timers, pp, name = 3;
+
+	module.exports = function(entity, game) {
+
+	    pp = game.entities.get(name, "position");
+	    pp.y += game.entities.get(name, "speed");
+
+	    if (pp.y <= 0) {
+	        timers = game.entities.get(entity, "timers");
+	        timers.animate_name.time = 0;
+	        timers.animate_name.running = true;
+	    }
+	};
+
+
+/***/ },
+/* 99 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var fi, frog = 2;
+
+	module.exports = function(entity, game) {
+	    fi = game.entities.get(frog, "image");
+	    fi.name = game.entities.get(frog, "won_frog");
+	};
+
+
+/***/ },
+/* 100 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9461,7 +9567,7 @@
 
 
 /***/ },
-/* 98 */
+/* 101 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9488,7 +9594,119 @@
 
 
 /***/ },
-/* 99 */
+/* 102 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var name, sw, sp, shw, shp, nw, np, scene = 1, shadow = 2, frog_name = 3, frogs = __webpack_require__(103);
+	var keys = [
+	    { "value": "30", "name": "king_frog" },
+	    { "value": "25", "name": "frog_cordileone" },
+	    { "value": "20", "name": "arthur" },
+	    { "value": "15", "name": "frog_topic" },
+	    { "value": "10", "name": "david" },
+	    { "value": "5", "name": "plain" },
+	    { "value": "3", "name": "lilly" },
+	    { "value": "0", "name": "skele" },
+	    { "value": "-5", "name": "bozo" },
+	    { "value": "-10", "name": "hobo" },
+	    { "value": "-15", "name": "donald" }
+	];
+
+	module.exports = function(game) { // eslint-disable-line no-unused-vars
+	    game.scaleCanvasToFitRectangle(1280,960);
+
+	    sw = game.entities.get(scene, "size").width;
+	    sp = game.entities.get(scene, "position");
+	    sp.x = game.canvas.width * 0.5 - sw * 0.5;
+
+	    shw = game.entities.get(shadow, "size").width;
+	    shp = game.entities.get(shadow, "position");
+	    shp.x = game.canvas.width * 0.5 - shw * 0.5;
+
+	    nw = game.entities.get(frog_name, "size").width;
+	    np = game.entities.get(frog_name, "position");
+	    np.x = game.canvas.width * 0.5 - nw * 0.5;
+
+	    for (var i = 0; i < keys.length; i++) {
+	        if (parseInt(keys[i].value, 10) < game.arguments.final_score) {
+	            name = keys[i].name;
+	            break;
+	        }
+	    }
+
+	    game.entities.set(frog_name, "title", "You've become " + frogs[name].name);
+	    game.entities.set(frog_name, "subtitle", frogs[name].subtitle);
+	    game.entities.set(shadow, "won_frog", frogs[name].image);
+
+	};
+
+
+/***/ },
+/* 103 */
+/***/ function(module, exports) {
+
+	module.exports = {
+		"donald": {
+			"name": "Donald Jump",
+			"subtitle": "We've Got the Best Lilypads",
+			"image": "jump.png"
+		},
+		"skele": {
+			"name": "Skelefrog",
+			"subtitle": "Eat! You're skin and bones!",
+			"image": "malnourished.png"
+		},
+		"hobo": {
+			"name": "Hobofrog",
+			"subtitle": "Will Jump 4 Food",
+			"image": "oldman.png"
+		},
+		"bozo": {
+			"name": "Bozo the Toad",
+			"subtitle": "The D Student of the Pond",
+			"image": "clown.png"
+		},
+		"lilly": {
+			"name": "Lillybrarian",
+			"subtitle": "Life Sucks and Then You Croak",
+			"image": "librarian.png"
+		},
+		"plain": {
+			"name": "Frog",
+			"subtitle": "You're Not Awful. You're Just Not Stellar",
+			"image": "frog.png"
+		},
+		"david": {
+			"name": "David Kroakie",
+			"subtitle": "I Will be King and You Will Be Queen... of the pond",
+			"image": "bowie.png"
+		},
+		"frog_topic": {
+			"name": "Frog Topic",
+			"subtitle": "Rock Out With Your Frog Out",
+			"image": "hardcore.png"
+		},
+		"arthur": {
+			"name": "Arthur Pondzerelli",
+			"subtitle": "We've Got a Badass Over Here",
+			"image": "badass.png"
+		},
+		"frog_cordileone": {
+			"name": "Frog Cordileone",
+			"subtitle": "The Pondfather",
+			"image": "mafia.png"
+		},
+		"king_frog": {
+			"name": "Lord Frogus IV",
+			"subtitle": "The King of the Pond",
+			"image": "king.png"
+		}
+	};
+
+/***/ },
+/* 104 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9513,13 +9731,13 @@
 
 
 /***/ },
-/* 100 */
+/* 105 */
 /***/ function(module, exports) {
 
 	"use strict";
 	var scores, bounds, containerImage,indicatorImage, playerPosition, playerSize, playerAnimation, timers, heartAnimation, cameraPosition, camera = 0, container = 3, indicator = 4, player = 1, heart = 6;
 	module.exports = function(game) { // eslint-disable-line no-unused-vars
-	    game.sounds.play("polymorphic_game_loop.wav");
+	    game.sounds.play("polymorphic_game_loop.mp3",true);
 	    bounds = game.entities.get(container,"size");
 	    containerImage = game.entities.get(container, "image");
 	    game.scaleCanvasToFitRectangle(1280,960);
@@ -9583,18 +9801,32 @@
 
 
 /***/ },
-/* 101 */
+/* 106 */
 /***/ function(module, exports) {
 
 	"use strict";
 
 	module.exports = function(game) { // eslint-disable-line no-unused-vars
-		game.sounds.stop("polymorphic_game_loop.wav");
+		game.sounds.stop("polymorphic_game_loop.mp3");
 	};
 
 
 /***/ },
-/* 102 */
+/* 107 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var timers;
+
+	module.exports = function(entity, game) {
+	    timers = game.entities.get(entity, "timers");
+	    timers.animate_name.running = true;
+	};
+
+
+/***/ },
+/* 108 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9639,7 +9871,7 @@
 
 
 /***/ },
-/* 103 */
+/* 109 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9647,6 +9879,7 @@
 	var sw, sp, fp, fw, scene = 1, fish = 2;
 
 	module.exports = function(game) { // eslint-disable-line no-unused-vars
+	    game.sounds.play("polymorphic_intro_music.mp3",true);
 	    game.scaleCanvasToFitRectangle(1280,960);
 
 	    sw = game.entities.get(scene, "size").width;
@@ -9663,7 +9896,19 @@
 
 
 /***/ },
-/* 104 */
+/* 110 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	module.exports = function(game) { // eslint-disable-line no-unused-vars
+	    game.sounds.stop("polymorphic_intro_music.mp3");
+
+	};
+
+
+/***/ },
+/* 111 */
 /***/ function(module, exports) {
 
 	function webpackContext(req) {
@@ -9672,319 +9917,377 @@
 	webpackContext.keys = function() { return []; };
 	webpackContext.resolve = webpackContext;
 	module.exports = webpackContext;
-	webpackContext.id = 104;
+	webpackContext.id = 111;
 
-
-/***/ },
-/* 105 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var map = {
-		"./BabyFood.png": 106,
-		"./BlueFood.png": 107,
-		"./BlueParticle.png": 108,
-		"./EatThis.png": 109,
-		"./GameBG.jpg": 110,
-		"./GreenFood.png": 111,
-		"./GreenParticle.png": 112,
-		"./RedFood.png": 113,
-		"./RedParticle.png": 114,
-		"./TrainingBG.jpg": 115,
-		"./YellowFood.png": 116,
-		"./YellowParticle.png": 117,
-		"./babyparticles.png": 118,
-		"./bg.jpg": 119,
-		"./blue_arrow.png": 120,
-		"./bronze.png": 121,
-		"./gold.png": 122,
-		"./green_arrow.png": 123,
-		"./level_two.jpg": 124,
-		"./logo.png": 125,
-		"./lowest.png": 126,
-		"./player.png": 127,
-		"./polywag.png": 128,
-		"./red_arrow.png": 129,
-		"./silver.png": 130,
-		"./silver_two.png": 131,
-		"./spotlight.png": 132,
-		"./tadpoleanimate.png": 133,
-		"./timer.png": 134,
-		"./title.png": 135,
-		"./training.jpg": 136,
-		"./white_arrow.png": 137,
-		"./yellow_arrow.png": 138
-	};
-	function webpackContext(req) {
-		return __webpack_require__(webpackContextResolve(req));
-	};
-	function webpackContextResolve(req) {
-		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
-	};
-	webpackContext.keys = function webpackContextKeys() {
-		return Object.keys(map);
-	};
-	webpackContext.resolve = webpackContextResolve;
-	module.exports = webpackContext;
-	webpackContext.id = 105;
-
-
-/***/ },
-/* 106 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/BabyFood.png";
-
-/***/ },
-/* 107 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/BlueFood.png";
-
-/***/ },
-/* 108 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/BlueParticle.png";
-
-/***/ },
-/* 109 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/EatThis.png";
-
-/***/ },
-/* 110 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/GameBG.jpg";
-
-/***/ },
-/* 111 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/GreenFood.png";
 
 /***/ },
 /* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/GreenParticle.png";
+	var map = {
+		"./BabyFood.png": 113,
+		"./BlueFood.png": 114,
+		"./BlueParticle.png": 115,
+		"./EatThis.png": 116,
+		"./GameBG.jpg": 117,
+		"./GreenFood.png": 118,
+		"./GreenParticle.png": 119,
+		"./RedFood.png": 120,
+		"./RedParticle.png": 121,
+		"./TrainingBG.jpg": 122,
+		"./YellowFood.png": 123,
+		"./YellowParticle.png": 124,
+		"./babyparticles.png": 125,
+		"./badass.png": 126,
+		"./bg.jpg": 127,
+		"./blue_arrow.png": 128,
+		"./bowie.png": 129,
+		"./bronze.png": 130,
+		"./clown.png": 131,
+		"./end_bg.png": 132,
+		"./frog.png": 133,
+		"./gold.png": 134,
+		"./green_arrow.png": 135,
+		"./hardcore.png": 136,
+		"./hobofrog.png": 137,
+		"./jump.png": 138,
+		"./king.png": 139,
+		"./level_two.jpg": 140,
+		"./librarian.png": 141,
+		"./logo.png": 142,
+		"./lowest.png": 143,
+		"./mafia.png": 144,
+		"./malnourished.png": 145,
+		"./oldman.png": 146,
+		"./player.png": 147,
+		"./polywag.png": 148,
+		"./red_arrow.png": 149,
+		"./shadow.png": 150,
+		"./shadows.png": 151,
+		"./silver.png": 152,
+		"./silver_two.png": 153,
+		"./spotlight.png": 154,
+		"./tadpoleanimate.png": 155,
+		"./timer.png": 156,
+		"./title.png": 157,
+		"./training.jpg": 158,
+		"./white_arrow.png": 159,
+		"./yellow_arrow.png": 160
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 112;
+
 
 /***/ },
 /* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/RedFood.png";
+	module.exports = __webpack_require__.p + "images/BabyFood.png";
 
 /***/ },
 /* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/RedParticle.png";
+	module.exports = __webpack_require__.p + "images/BlueFood.png";
 
 /***/ },
 /* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/TrainingBG.jpg";
+	module.exports = __webpack_require__.p + "images/BlueParticle.png";
 
 /***/ },
 /* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/YellowFood.png";
+	module.exports = __webpack_require__.p + "images/EatThis.png";
 
 /***/ },
 /* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/YellowParticle.png";
+	module.exports = __webpack_require__.p + "images/GameBG.jpg";
 
 /***/ },
 /* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/babyparticles.png";
+	module.exports = __webpack_require__.p + "images/GreenFood.png";
 
 /***/ },
 /* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/bg.jpg";
+	module.exports = __webpack_require__.p + "images/GreenParticle.png";
 
 /***/ },
 /* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/blue_arrow.png";
+	module.exports = __webpack_require__.p + "images/RedFood.png";
 
 /***/ },
 /* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/bronze.png";
+	module.exports = __webpack_require__.p + "images/RedParticle.png";
 
 /***/ },
 /* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/gold.png";
+	module.exports = __webpack_require__.p + "images/TrainingBG.jpg";
 
 /***/ },
 /* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/green_arrow.png";
+	module.exports = __webpack_require__.p + "images/YellowFood.png";
 
 /***/ },
 /* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/level_two.jpg";
+	module.exports = __webpack_require__.p + "images/YellowParticle.png";
 
 /***/ },
 /* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/logo.png";
+	module.exports = __webpack_require__.p + "images/babyparticles.png";
 
 /***/ },
 /* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/lowest.png";
+	module.exports = __webpack_require__.p + "images/badass.png";
 
 /***/ },
 /* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/player.png";
+	module.exports = __webpack_require__.p + "images/bg.jpg";
 
 /***/ },
 /* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/polywag.png";
+	module.exports = __webpack_require__.p + "images/blue_arrow.png";
 
 /***/ },
 /* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/red_arrow.png";
+	module.exports = __webpack_require__.p + "images/bowie.png";
 
 /***/ },
 /* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/silver.png";
+	module.exports = __webpack_require__.p + "images/bronze.png";
 
 /***/ },
 /* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/silver_two.png";
+	module.exports = __webpack_require__.p + "images/clown.png";
 
 /***/ },
 /* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/spotlight.png";
+	module.exports = __webpack_require__.p + "images/end_bg.png";
 
 /***/ },
 /* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/tadpoleanimate.png";
+	module.exports = __webpack_require__.p + "images/frog.png";
 
 /***/ },
 /* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/timer.png";
+	module.exports = __webpack_require__.p + "images/gold.png";
 
 /***/ },
 /* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/title.png";
+	module.exports = __webpack_require__.p + "images/green_arrow.png";
 
 /***/ },
 /* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/training.jpg";
+	module.exports = __webpack_require__.p + "images/hardcore.png";
 
 /***/ },
 /* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/white_arrow.png";
+	module.exports = __webpack_require__.p + "images/hobofrog.png";
 
 /***/ },
 /* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/yellow_arrow.png";
+	module.exports = __webpack_require__.p + "images/jump.png";
 
 /***/ },
 /* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var map = {
-		"./dropletts.wav": 140,
-		"./dropletts_02.wav": 141,
-		"./nom.wav": 142,
-		"./polymorphic_game_loop.wav": 143
-	};
-	function webpackContext(req) {
-		return __webpack_require__(webpackContextResolve(req));
-	};
-	function webpackContextResolve(req) {
-		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
-	};
-	webpackContext.keys = function webpackContextKeys() {
-		return Object.keys(map);
-	};
-	webpackContext.resolve = webpackContextResolve;
-	module.exports = webpackContext;
-	webpackContext.id = 139;
-
+	module.exports = __webpack_require__.p + "images/king.png";
 
 /***/ },
 /* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "sounds/dropletts.wav";
+	module.exports = __webpack_require__.p + "images/level_two.jpg";
 
 /***/ },
 /* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "sounds/dropletts_02.wav";
+	module.exports = __webpack_require__.p + "images/librarian.png";
 
 /***/ },
 /* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "sounds/nom.wav";
+	module.exports = __webpack_require__.p + "images/logo.png";
 
 /***/ },
 /* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "sounds/polymorphic_game_loop.wav";
+	module.exports = __webpack_require__.p + "images/lowest.png";
 
 /***/ },
 /* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = __webpack_require__.p + "images/mafia.png";
+
+/***/ },
+/* 145 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/malnourished.png";
+
+/***/ },
+/* 146 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/oldman.png";
+
+/***/ },
+/* 147 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/player.png";
+
+/***/ },
+/* 148 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/polywag.png";
+
+/***/ },
+/* 149 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/red_arrow.png";
+
+/***/ },
+/* 150 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/shadow.png";
+
+/***/ },
+/* 151 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/shadows.png";
+
+/***/ },
+/* 152 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/silver.png";
+
+/***/ },
+/* 153 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/silver_two.png";
+
+/***/ },
+/* 154 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/spotlight.png";
+
+/***/ },
+/* 155 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/tadpoleanimate.png";
+
+/***/ },
+/* 156 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/timer.png";
+
+/***/ },
+/* 157 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/title.png";
+
+/***/ },
+/* 158 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/training.jpg";
+
+/***/ },
+/* 159 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/white_arrow.png";
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/yellow_arrow.png";
+
+/***/ },
+/* 161 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var map = {
-		"./animations.json": 145,
-		"./entities.json": 146,
-		"./inputs.json": 147,
-		"./prefabs.json": 148,
-		"./scenes.json": 149,
-		"./systems.json": 150
+		"./dropletts.mp3": 162,
+		"./dropletts.wav": 163,
+		"./dropletts_02.wav": 164,
+		"./nom.wav": 165,
+		"./polymorphic_game_loop.mp3": 166,
+		"./polymorphic_game_loop.wav": 167,
+		"./polymorphic_intro_music.mp3": 168
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -9997,11 +10300,80 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 144;
+	webpackContext.id = 161;
 
 
 /***/ },
-/* 145 */
+/* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/dropletts.mp3";
+
+/***/ },
+/* 163 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/dropletts.wav";
+
+/***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/dropletts_02.wav";
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/nom.wav";
+
+/***/ },
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/polymorphic_game_loop.mp3";
+
+/***/ },
+/* 167 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/polymorphic_game_loop.wav";
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/polymorphic_intro_music.mp3";
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./animations.json": 170,
+		"./entities.json": 171,
+		"./frogs.json": 103,
+		"./inputs.json": 172,
+		"./prefabs.json": 173,
+		"./scenes.json": 174,
+		"./systems.json": 175
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 169;
+
+
+/***/ },
+/* 170 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10129,7 +10501,7 @@
 	};
 
 /***/ },
-/* 146 */
+/* 171 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10224,7 +10596,7 @@
 						"script": "./scripts/advance_game"
 					},
 					"change_indicator": {
-						"running": true,
+						"running": false,
 						"time": 0,
 						"max": 10000,
 						"script": "./scripts/change_indicator"
@@ -10432,11 +10804,93 @@
 					"name": "EatThis.png"
 				}
 			}
+		],
+		"end": [
+			{
+				"id": 0,
+				"camera": true,
+				"strokeStyle": "white",
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": -1
+				},
+				"timers": {
+					"show_name": {
+						"running": true,
+						"time": 0,
+						"max": 3000,
+						"script": "./scripts/show_name"
+					},
+					"animate_name": {
+						"running": false,
+						"time": 0,
+						"max": 25,
+						"script": "./scripts/animate_name"
+					},
+					"change_image": {
+						"running": true,
+						"time": 0,
+						"max": 2500,
+						"script": "./scripts/change_image"
+					}
+				},
+				"matchCanvasSize": true
+			},
+			{
+				"id": 1,
+				"background": true,
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 1
+				},
+				"size": {
+					"width": 1280,
+					"height": 960
+				},
+				"image": {
+					"name": "end_bg.png"
+				}
+			},
+			{
+				"id": 2,
+				"shadow": true,
+				"position": {
+					"x": 100,
+					"y": 200,
+					"z": 2
+				},
+				"size": {
+					"width": 400,
+					"height": 280
+				},
+				"image": {
+					"name": "shadows.png"
+				},
+				"won_frog": "hobofrog.png"
+			},
+			{
+				"id": 3,
+				"frog_name": true,
+				"position": {
+					"x": 100,
+					"y": -160,
+					"z": 2
+				},
+				"speed": 3.5,
+				"title": "Sir Frog",
+				"subtitle": "This is a subtitle... deal with it",
+				"size": {
+					"width": 800,
+					"height": 150
+				}
+			}
 		]
 	};
 
 /***/ },
-/* 147 */
+/* 172 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10510,7 +10964,7 @@
 	};
 
 /***/ },
-/* 148 */
+/* 173 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10600,22 +11054,26 @@
 	};
 
 /***/ },
-/* 149 */
+/* 174 */
 /***/ function(module, exports) {
 
 	module.exports = {
 		"title": {
 			"first": true,
-			"onEnter": "./scripts/title-enter"
+			"onEnter": "./scripts/title-enter",
+			"onExit": "./scripts/title-exit"
 		},
 		"main": {
 			"onEnter": "./scripts/main-enter",
 			"onExit": "./scripts/main-exit"
+		},
+		"end": {
+			"onEnter": "./scripts/end-enter"
 		}
 	};
 
 /***/ },
-/* 150 */
+/* 175 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10724,6 +11182,12 @@
 				"name": "./systems/renderer/draw-timer",
 				"scenes": [
 					"main"
+				]
+			},
+			{
+				"name": "./systems/renderer/draw-name",
+				"scenes": [
+					"end"
 				]
 			},
 			{
