@@ -60,6 +60,10 @@
             {
                 "device": "mouse",
                 "button": 0
+            },
+            {
+                "device": "gamepad",
+                "button": "a"
             }
         ]
     }

@@ -126,11 +126,11 @@
                     "script": "./scripts/decelerate"
                 }
             },
-            "angle_mod": 0.0175,
-            "speed": 0.45,
+            "angle_mod": 0.0185,
+            "speed": 0.5,
             "friction": {
-                "x": 0.987,
-                "y": 0.987
+                "x": 0.96,
+                "y": 0.96
             },
             "rotation": {
                 "angle": 0
