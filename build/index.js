@@ -9089,19 +9089,19 @@
 	                image = new Image();
 	                switch (type) {
 	                    case 1:
-	                        image.src = "../../../images/yellow_arrow.png";
+	                        image.src = "../../../build/images/yellow_arrow.png";
 	                        break;
 	                    case 2:
-	                        image.src = "../../../images/green_arrow.png";
+	                        image.src = "../../../build/images/green_arrow.png";
 	                        break;
 	                    case 3:
-	                        image.src = "../../../images/blue_arrow.png";
+	                        image.src = "../../../build/images/blue_arrow.png";
 	                        break;
 	                    case 4:
-	                        image.src = "../../../images/red_arrow.png";
+	                        image.src = "../../../build/images/red_arrow.png";
 	                        break;
 	                    default:
-	                        image.src = "../../../images/red_arrow.png";
+	                        image.src = "../../../build/images/red_arrow.png";
 	                        break;
 	                }
 	                opposite = oc.y - vc.y;
