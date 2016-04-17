@@ -63,7 +63,7 @@
 	var localSystemRequire = __webpack_require__(87);
 
 	var localScriptPath = "./scripts";
-	var localScriptRequire = __webpack_require__(91);
+	var localScriptRequire = __webpack_require__(92);
 
 	function generateManifest(files, folder) {
 	  return files.reduce(function(manifest, file) {
@@ -73,16 +73,16 @@
 	  }, {});
 	}
 
-	__webpack_require__(97);
+	__webpack_require__(98);
 
-	var imageContext = __webpack_require__(98);
+	var imageContext = __webpack_require__(99);
 	var imageManifest = generateManifest(imageContext.keys(), "images");
 
-	var soundContext = __webpack_require__(114);
+	var soundContext = __webpack_require__(115);
 	var soundManifest = generateManifest(soundContext.keys(), "sounds");
 
 	var localDataPath = "./data";
-	var localDataRequire = __webpack_require__(115);
+	var localDataRequire = __webpack_require__(116);
 
 	function customRequire(path) {
 	  if (path.indexOf(splatSystemPath) === 0) {
@@ -8988,9 +8988,10 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./renderer/sample-renderer-system.js": 88,
-		"./simulation/hitbox.js": 89,
-		"./simulation/sample-simulation-system.js": 90
+		"./renderer/crop-game.js": 88,
+		"./renderer/sample-renderer-system.js": 89,
+		"./simulation/hitbox.js": 90,
+		"./simulation/sample-simulation-system.js": 91
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -9013,13 +9014,116 @@
 	"use strict";
 
 	module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
-	  ecs.addEach(function(entity, context) { // eslint-disable-line no-unused-vars
-	  }, "playerController2d");
+		ecs.addEach(function(entity, context) { // eslint-disable-line no-unused-vars
+			var viewportPosition = game.entities.get(entity, "position");
+			var viewportSize = game.entities.get(entity, "size");
+
+			var cameraPosition = game.entities.get(0, "position");
+			var cameraSize = game.entities.get(0, "size");
+
+			context.fillStyle = "black";
+			context.fillRect(
+				cameraPosition.x,
+				cameraPosition.y,
+				cameraSize.width,
+				viewportPosition.y - cameraPosition.y
+			);
+			context.fillRect(
+				viewportPosition.x + viewportSize.width,
+				cameraPosition.y,
+				(cameraPosition.x + cameraSize.width) - (viewportPosition.x + viewportSize.width),
+				cameraSize.height
+			);
+			context.fillRect(
+				cameraPosition.x,
+				viewportPosition.y + viewportSize.height,
+				cameraSize.width,
+				(cameraPosition.y + cameraSize.height) - (viewportPosition.y + viewportSize.height)
+			);
+			context.fillRect(
+				cameraPosition.x,
+				cameraPosition.y,
+				viewportPosition.x - cameraPosition.x,
+				cameraSize.height
+			);
+
+		}, "viewPort");
 	};
 
 
 /***/ },
 /* 89 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	var point, angle, opposite, adjacent, distance;
+	var collidables, vp, vs, vc, op, os, oc, i;
+	var boxSize, radius, type;
+	var viewPort = 5;
+	module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
+	    game.entities.registerSearch("linesToCollidablesSearch", ["collisions", "position", "size"]);
+	    ecs.add(function linesToCollidables(entities, context) {
+	        collidables = game.entities.find("collisions");
+
+	        vp = game.entities.get(viewPort, "position");
+	        vs = game.entities.get(viewPort, "size");
+	        vc = {
+	            "x": vp.x + (vs.width * 0.5),
+	            "y": vp.y + (vs.height * 0.5)
+	        };
+
+	        for (i = 0; i < collidables.length; i++) {
+	            if (game.entities.get(collidables[i], "food")) {
+	                op = game.entities.get(collidables[i], "position");
+	                os = game.entities.get(collidables[i], "size");
+	                oc = {
+	                    "x": op.x + (os.width * 0.5),
+	                    "y": op.y + (os.height * 0.5)
+	                };
+	                boxSize = 20;
+	                radius = 470;
+	                type = game.entities.get(collidables[i], "type");
+	                switch (type) {
+	                    case 1:
+	                        context.fillStyle = "yellow";
+	                        break;
+	                    case 2:
+	                        context.fillStyle = "green";
+	                        break;
+	                    case 3:
+	                        context.fillStyle = "blue";
+	                        break;
+	                    case 4:
+	                        context.fillStyle = "red";
+	                        break;
+	                    default:
+	                        context.fillStyle = "white";
+	                        break;
+	                }
+	                opposite = oc.y - vc.y;
+	                adjacent = oc.x - vc.x;
+	                angle = Math.atan2(opposite, adjacent);
+	                point = getPointOnCircle(vc, angle, radius);
+	                distance = Math.sqrt((vc.x - oc.x) * (vc.x - oc.x) + (vc.y - oc.y) * (vc.y - oc.y));
+	                if (distance > radius) {
+	                    context.fillRect(point.x, point.y, boxSize, boxSize);
+	                }
+	            }
+	        }
+	    }, "linesToCollidablesSearch");
+	};
+
+	function getPointOnCircle(point, angle, radius) {
+	    return {
+	        "x": point.x + (radius * Math.cos(angle)),
+	        "y": point.y + (radius * Math.sin(angle))
+	    };
+	}
+
+
+/***/ },
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9086,7 +9190,7 @@
 
 
 /***/ },
-/* 90 */
+/* 91 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9125,15 +9229,15 @@
 
 
 /***/ },
-/* 91 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./advance_game.js": 92,
-		"./decelerate.js": 93,
-		"./main-enter.js": 94,
-		"./main-exit.js": 95,
-		"./spawn_food.js": 96
+		"./advance_game.js": 93,
+		"./decelerate.js": 94,
+		"./main-enter.js": 95,
+		"./main-exit.js": 96,
+		"./spawn_food.js": 97
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -9146,11 +9250,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 91;
+	webpackContext.id = 92;
 
 
 /***/ },
-/* 92 */
+/* 93 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9175,7 +9279,7 @@
 
 
 /***/ },
-/* 93 */
+/* 94 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9202,41 +9306,48 @@
 
 
 /***/ },
-/* 94 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	module.exports = function(game) { // eslint-disable-line no-unused-vars
-		var scores = game.entities.get(0,"scores");
-		console.log(game.arguments);
-		if (game.arguments["scores"]) {
-			scores.round1 = game.arguments["scores"].round1;
-			scores.round2 = game.arguments["scores"].round2;
-			scores.round3 = game.arguments["scores"].round3;
-		} else {
-			scores.round1 = 0;
-			scores.round2 = 0;
-			scores.round3 = 0;
-		}
-
-		game.entities.set(0,"round",game.arguments["round"] || 0);
-		console.log(scores);
-	};
-
-
-/***/ },
 /* 95 */
 /***/ function(module, exports) {
 
 	"use strict";
-
+	var scores, bounds,playerPosition, playerSize, cameraPosition, camera = 0, container = 3, player = 1;
 	module.exports = function(game) { // eslint-disable-line no-unused-vars
+	    bounds = game.entities.get(container,"size");
+	    playerPosition = game.entities.get(player,"position");
+	    playerSize = game.entities.get(player,"size");
+	    cameraPosition = game.entities.get(camera,"position");
+	    game.scaleCanvasToFitRectangle(1280,960);
+	    scores = game.entities.get(camera,"scores");
+	    if (game.arguments["scores"]) {
+	        scores.round1 = game.arguments["scores"].round1;
+	        scores.round2 = game.arguments["scores"].round2;
+	        scores.round3 = game.arguments["scores"].round3;
+	    } else {
+	        scores.round1 = 0;
+	        scores.round2 = 0;
+	        scores.round3 = 0;
+	    }
+
+	    playerPosition.x = bounds.width / 2 - playerSize.width / 2;
+	    playerPosition.y = bounds.height / 2 - playerSize.height / 2;
+	    cameraPosition.x = bounds.width / 2 - game.canvas.width / 2;
+	    cameraPosition.y = bounds.height / 2 - game.canvas.height / 2;
+	    game.entities.set(camera,"round",game.arguments["round"] || 0);
 	};
 
 
 /***/ },
 /* 96 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	module.exports = function(game) { // eslint-disable-line no-unused-vars
+	};
+
+
+/***/ },
+/* 97 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9280,7 +9391,7 @@
 
 
 /***/ },
-/* 97 */
+/* 98 */
 /***/ function(module, exports) {
 
 	function webpackContext(req) {
@@ -9288,41 +9399,6 @@
 	}
 	webpackContext.keys = function() { return []; };
 	webpackContext.resolve = webpackContext;
-	module.exports = webpackContext;
-	webpackContext.id = 97;
-
-
-/***/ },
-/* 98 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var map = {
-		"./BabyFood.png": 99,
-		"./BlueFood.png": 100,
-		"./BlueParticle.png": 101,
-		"./GreenFood.png": 102,
-		"./GreenParticle.png": 103,
-		"./RedFood.png": 104,
-		"./RedParticle.png": 105,
-		"./YellowFood.png": 106,
-		"./YellowParticle.png": 107,
-		"./babyparticles.png": 108,
-		"./bg.jpg": 109,
-		"./logo.png": 110,
-		"./player.png": 111,
-		"./tadpoleanimate.png": 112,
-		"./training.jpg": 113
-	};
-	function webpackContext(req) {
-		return __webpack_require__(webpackContextResolve(req));
-	};
-	function webpackContextResolve(req) {
-		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
-	};
-	webpackContext.keys = function webpackContextKeys() {
-		return Object.keys(map);
-	};
-	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
 	webpackContext.id = 98;
 
@@ -9331,116 +9407,22 @@
 /* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/BabyFood.png";
-
-/***/ },
-/* 100 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/BlueFood.png";
-
-/***/ },
-/* 101 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/BlueParticle.png";
-
-/***/ },
-/* 102 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/GreenFood.png";
-
-/***/ },
-/* 103 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/GreenParticle.png";
-
-/***/ },
-/* 104 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/RedFood.png";
-
-/***/ },
-/* 105 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/RedParticle.png";
-
-/***/ },
-/* 106 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/YellowFood.png";
-
-/***/ },
-/* 107 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/YellowParticle.png";
-
-/***/ },
-/* 108 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/babyparticles.png";
-
-/***/ },
-/* 109 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/bg.jpg";
-
-/***/ },
-/* 110 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/logo.png";
-
-/***/ },
-/* 111 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/player.png";
-
-/***/ },
-/* 112 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/tadpoleanimate.png";
-
-/***/ },
-/* 113 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "images/training.jpg";
-
-/***/ },
-/* 114 */
-/***/ function(module, exports) {
-
-	function webpackContext(req) {
-		throw new Error("Cannot find module '" + req + "'.");
-	}
-	webpackContext.keys = function() { return []; };
-	webpackContext.resolve = webpackContext;
-	module.exports = webpackContext;
-	webpackContext.id = 114;
-
-
-/***/ },
-/* 115 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var map = {
-		"./animations.json": 116,
-		"./entities.json": 117,
-		"./inputs.json": 118,
-		"./prefabs.json": 119,
-		"./scenes.json": 120,
-		"./systems.json": 121
+		"./BabyFood.png": 100,
+		"./BlueFood.png": 101,
+		"./BlueParticle.png": 102,
+		"./GreenFood.png": 103,
+		"./GreenParticle.png": 104,
+		"./RedFood.png": 105,
+		"./RedParticle.png": 106,
+		"./YellowFood.png": 107,
+		"./YellowParticle.png": 108,
+		"./babyparticles.png": 109,
+		"./bg.jpg": 110,
+		"./logo.png": 111,
+		"./player.png": 112,
+		"./tadpoleanimate.png": 113,
+		"./training.jpg": 114
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -9453,11 +9435,140 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
+	webpackContext.id = 99;
+
+
+/***/ },
+/* 100 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/BabyFood.png";
+
+/***/ },
+/* 101 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/BlueFood.png";
+
+/***/ },
+/* 102 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/BlueParticle.png";
+
+/***/ },
+/* 103 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/GreenFood.png";
+
+/***/ },
+/* 104 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/GreenParticle.png";
+
+/***/ },
+/* 105 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/RedFood.png";
+
+/***/ },
+/* 106 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/RedParticle.png";
+
+/***/ },
+/* 107 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/YellowFood.png";
+
+/***/ },
+/* 108 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/YellowParticle.png";
+
+/***/ },
+/* 109 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/babyparticles.png";
+
+/***/ },
+/* 110 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/bg.jpg";
+
+/***/ },
+/* 111 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/logo.png";
+
+/***/ },
+/* 112 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/player.png";
+
+/***/ },
+/* 113 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/tadpoleanimate.png";
+
+/***/ },
+/* 114 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/training.jpg";
+
+/***/ },
+/* 115 */
+/***/ function(module, exports) {
+
+	function webpackContext(req) {
+		throw new Error("Cannot find module '" + req + "'.");
+	}
+	webpackContext.keys = function() { return []; };
+	webpackContext.resolve = webpackContext;
+	module.exports = webpackContext;
 	webpackContext.id = 115;
 
 
 /***/ },
 /* 116 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./animations.json": 117,
+		"./entities.json": 118,
+		"./inputs.json": 119,
+		"./prefabs.json": 120,
+		"./scenes.json": 121,
+		"./systems.json": 122
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 116;
+
+
+/***/ },
+/* 117 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9482,7 +9593,7 @@
 	};
 
 /***/ },
-/* 117 */
+/* 118 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9513,7 +9624,7 @@
 				},
 				"follow": {
 					"id": 1,
-					"distance": 200
+					"distance": 50
 				},
 				"scores": {
 					"round1": 0,
@@ -9548,7 +9659,7 @@
 					}
 				},
 				"angle_mod": 0.0175,
-				"speed": 0.25,
+				"speed": 0.5,
 				"friction": {
 					"x": 0.987,
 					"y": 0.987
@@ -9617,7 +9728,7 @@
 				"match": {
 					"id": 0,
 					"offsetX": 0,
-					"offsetY": 575
+					"offsetY": 850
 				},
 				"matchCenterX": {
 					"id": 0
@@ -9625,12 +9736,30 @@
 				"image": {
 					"name": "BabyFood.png"
 				}
+			},
+			{
+				"id": 5,
+				"viewPort": true,
+				"position": {
+					"x": 0,
+					"y": 0
+				},
+				"size": {
+					"width": 1280,
+					"height": 960
+				},
+				"matchCenterX": {
+					"id": 0
+				},
+				"matchCenterY": {
+					"id": 0
+				}
 			}
 		]
 	};
 
 /***/ },
-/* 118 */
+/* 119 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9694,7 +9823,7 @@
 	};
 
 /***/ },
-/* 119 */
+/* 120 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9784,7 +9913,7 @@
 	};
 
 /***/ },
-/* 120 */
+/* 121 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9796,7 +9925,7 @@
 	};
 
 /***/ },
-/* 121 */
+/* 122 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9838,6 +9967,10 @@
 				"scenes": "all"
 			},
 			{
+				"name": "splat-ecs/lib/systems/match-center-y",
+				"scenes": "all"
+			},
+			{
 				"name": "splat-ecs/lib/systems/decay-life-span",
 				"scenes": "all"
 			},
@@ -9876,11 +10009,19 @@
 				"scenes": "all"
 			},
 			{
-				"name": "./systems/renderer/sample-renderer-system",
+				"name": "splat-ecs/lib/systems/draw-image",
 				"scenes": "all"
 			},
 			{
-				"name": "splat-ecs/lib/systems/draw-image",
+				"name": "splat-ecs/lib/systems/draw-rectangles",
+				"scenes": ""
+			},
+			{
+				"name": "./systems/renderer/crop-game",
+				"scenes": "all"
+			},
+			{
+				"name": "./systems/renderer/sample-renderer-system",
 				"scenes": "all"
 			},
 			{
@@ -9889,7 +10030,7 @@
 			},
 			{
 				"name": "splat-ecs/lib/systems/draw-frame-rate",
-				"scenes": "all"
+				"scenes": ""
 			},
 			{
 				"name": "splat-ecs/lib/systems/revert-shake",
