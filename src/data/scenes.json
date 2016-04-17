@@ -1,10 +1,13 @@
 {
     "title": {
-        "first": true,
         "onEnter": "./scripts/title-enter"
     },
     "main": {
         "onEnter": "./scripts/main-enter",
         "onExit": "./scripts/main-exit"
+    },
+    "end": {
+        "first": true,
+        "onExit": "./scripts/end-enter"
     }
 }
