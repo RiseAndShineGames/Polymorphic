@@ -1,7 +1,7 @@
 "use strict";
 var scores, bounds, containerImage,indicatorImage, playerPosition, playerSize, playerAnimation, timers, heartAnimation, cameraPosition, camera = 0, container = 3, indicator = 4, player = 1, heart = 6;
 module.exports = function(game) { // eslint-disable-line no-unused-vars
-    game.sounds.play("polymorphic_game_loop.wav");
+    game.sounds.play("polymorphic_game_loop.mp3",true);
     bounds = game.entities.get(container,"size");
     containerImage = game.entities.get(container, "image");
     game.scaleCanvasToFitRectangle(1280,960);

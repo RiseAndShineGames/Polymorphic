@@ -90,7 +90,7 @@
                     "script": "./scripts/advance_game"
                 },
                 "change_indicator": {
-                  "running": true,
+                  "running": false,
                   "time": 0,
                   "max": 10000,
                   "script": "./scripts/change_indicator"

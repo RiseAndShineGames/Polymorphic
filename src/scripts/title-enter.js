@@ -3,6 +3,7 @@
 var sw, sp, fp, fw, scene = 1, fish = 2;
 
 module.exports = function(game) { // eslint-disable-line no-unused-vars
+    game.sounds.play("polymorphic_intro_music.mp3",true);
     game.scaleCanvasToFitRectangle(1280,960);
 
     sw = game.entities.get(scene, "size").width;
