@@ -11,27 +11,27 @@
             },
             "matchCanvasSize": true,
             "timers": {
-              "spawn_food": {
-                "running": true,
-                "time": 0,
-                "max": 1500,
-                "script": "./scripts/spawn_food"
-              },
-              "end_level": {
-                "running": true,
-                "time": 0,
-                "max": 30000,
-                "script": "./scripts/advance_game"
-              }
+                "spawn_food": {
+                    "running": true,
+                    "time": 0,
+                    "max": 1500,
+                    "script": "./scripts/spawn_food"
+                },
+                "end_level": {
+                    "running": true,
+                    "time": 0,
+                    "max": 30000,
+                    "script": "./scripts/advance_game"
+                }
             },
             "follow": {
                 "id": 1,
-                "distance": 200
+                "distance": 50
             },
             "scores": {
-              "round1":0,
-              "round2":0,
-              "round3":0
+                "round1":0,
+                "round2":0,
+                "round3":0
             },
             "round_score": 0,
             "round":0
@@ -61,7 +61,7 @@
                 }
             },
             "angle_mod": 0.0175,
-            "speed": 0.25,
+            "speed": 0.5,
             "friction": {
                 "x": 0.987,
                 "y": 0.987
@@ -130,7 +130,7 @@
             "match": {
                 "id": 0,
                 "offsetX": 0,
-                "offsetY": 575
+                "offsetY": 850
             },
             "matchCenterX": {
                 "id": 0

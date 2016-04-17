@@ -84,6 +84,10 @@
         },
         {
             "name": "splat-ecs/lib/systems/draw-rectangles",
+            "scenes": ""
+        },
+        {
+            "name": "./systems/renderer/crop-game",
             "scenes": "all"
         },
         {
@@ -96,7 +100,7 @@
         },
         {
             "name": "splat-ecs/lib/systems/draw-frame-rate",
-            "scenes": "all"
+            "scenes": ""
         },
         {
             "name": "splat-ecs/lib/systems/revert-shake",
