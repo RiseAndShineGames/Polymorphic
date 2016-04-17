@@ -78,11 +78,11 @@
 	var imageContext = __webpack_require__(112);
 	var imageManifest = generateManifest(imageContext.keys(), "images");
 
-	var soundContext = __webpack_require__(161);
+	var soundContext = __webpack_require__(163);
 	var soundManifest = generateManifest(soundContext.keys(), "sounds");
 
 	var localDataPath = "./data";
-	var localDataRequire = __webpack_require__(169);
+	var localDataRequire = __webpack_require__(171);
 
 	function customRequire(path) {
 	  if (path.indexOf(splatSystemPath) === 0) {
@@ -9931,51 +9931,53 @@
 		"./BabyFood.png": 113,
 		"./BlueFood.png": 114,
 		"./BlueParticle.png": 115,
-		"./EatThis.png": 116,
-		"./GameBG.jpg": 117,
-		"./GreenFood.png": 118,
-		"./GreenParticle.png": 119,
-		"./RedFood.png": 120,
-		"./RedParticle.png": 121,
-		"./TrainingBG.jpg": 122,
-		"./YellowFood.png": 123,
-		"./YellowParticle.png": 124,
-		"./babyparticles.png": 125,
-		"./badass.png": 126,
-		"./bg.jpg": 127,
-		"./blue_arrow.png": 128,
-		"./bowie.png": 129,
-		"./bronze.png": 130,
-		"./clown.png": 131,
-		"./end_bg.png": 132,
-		"./frog.png": 133,
-		"./gold.png": 134,
-		"./green_arrow.png": 135,
-		"./hardcore.png": 136,
-		"./hobofrog.png": 137,
-		"./jump.png": 138,
-		"./king.png": 139,
-		"./level_two.jpg": 140,
-		"./librarian.png": 141,
-		"./logo.png": 142,
-		"./lowest.png": 143,
-		"./mafia.png": 144,
-		"./malnourished.png": 145,
-		"./oldman.png": 146,
-		"./player.png": 147,
-		"./polywag.png": 148,
-		"./red_arrow.png": 149,
-		"./shadow.png": 150,
-		"./shadows.png": 151,
-		"./silver.png": 152,
-		"./silver_two.png": 153,
-		"./spotlight.png": 154,
-		"./tadpoleanimate.png": 155,
-		"./timer.png": 156,
-		"./title.png": 157,
-		"./training.jpg": 158,
-		"./white_arrow.png": 159,
-		"./yellow_arrow.png": 160
+		"./Controls.png": 116,
+		"./EatThis.png": 117,
+		"./GameBG.jpg": 118,
+		"./GreenFood.png": 119,
+		"./GreenParticle.png": 120,
+		"./PlayButton.png": 121,
+		"./RedFood.png": 122,
+		"./RedParticle.png": 123,
+		"./TrainingBG.jpg": 124,
+		"./YellowFood.png": 125,
+		"./YellowParticle.png": 126,
+		"./babyparticles.png": 127,
+		"./badass.png": 128,
+		"./bg.jpg": 129,
+		"./blue_arrow.png": 130,
+		"./bowie.png": 131,
+		"./bronze.png": 132,
+		"./clown.png": 133,
+		"./end_bg.png": 134,
+		"./frog.png": 135,
+		"./gold.png": 136,
+		"./green_arrow.png": 137,
+		"./hardcore.png": 138,
+		"./hobofrog.png": 139,
+		"./jump.png": 140,
+		"./king.png": 141,
+		"./level_two.jpg": 142,
+		"./librarian.png": 143,
+		"./logo.png": 144,
+		"./lowest.png": 145,
+		"./mafia.png": 146,
+		"./malnourished.png": 147,
+		"./oldman.png": 148,
+		"./player.png": 149,
+		"./polywag.png": 150,
+		"./red_arrow.png": 151,
+		"./shadow.png": 152,
+		"./shadows.png": 153,
+		"./silver.png": 154,
+		"./silver_two.png": 155,
+		"./spotlight.png": 156,
+		"./tadpoleanimate.png": 157,
+		"./timer.png": 158,
+		"./title.png": 159,
+		"./training.jpg": 160,
+		"./white_arrow.png": 161,
+		"./yellow_arrow.png": 162
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -10013,353 +10015,296 @@
 /* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/EatThis.png";
+	module.exports = __webpack_require__.p + "images/Controls.png";
 
 /***/ },
 /* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/GameBG.jpg";
+	module.exports = __webpack_require__.p + "images/EatThis.png";
 
 /***/ },
 /* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/GreenFood.png";
+	module.exports = __webpack_require__.p + "images/GameBG.jpg";
 
 /***/ },
 /* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/GreenParticle.png";
+	module.exports = __webpack_require__.p + "images/GreenFood.png";
 
 /***/ },
 /* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/RedFood.png";
+	module.exports = __webpack_require__.p + "images/GreenParticle.png";
 
 /***/ },
 /* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/RedParticle.png";
+	module.exports = __webpack_require__.p + "images/PlayButton.png";
 
 /***/ },
 /* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/TrainingBG.jpg";
+	module.exports = __webpack_require__.p + "images/RedFood.png";
 
 /***/ },
 /* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/YellowFood.png";
+	module.exports = __webpack_require__.p + "images/RedParticle.png";
 
 /***/ },
 /* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/YellowParticle.png";
+	module.exports = __webpack_require__.p + "images/TrainingBG.jpg";
 
 /***/ },
 /* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/babyparticles.png";
+	module.exports = __webpack_require__.p + "images/YellowFood.png";
 
 /***/ },
 /* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/badass.png";
+	module.exports = __webpack_require__.p + "images/YellowParticle.png";
 
 /***/ },
 /* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/bg.jpg";
+	module.exports = __webpack_require__.p + "images/babyparticles.png";
 
 /***/ },
 /* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/blue_arrow.png";
+	module.exports = __webpack_require__.p + "images/badass.png";
 
 /***/ },
 /* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/bowie.png";
+	module.exports = __webpack_require__.p + "images/bg.jpg";
 
 /***/ },
 /* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/bronze.png";
+	module.exports = __webpack_require__.p + "images/blue_arrow.png";
 
 /***/ },
 /* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/clown.png";
+	module.exports = __webpack_require__.p + "images/bowie.png";
 
 /***/ },
 /* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/end_bg.png";
+	module.exports = __webpack_require__.p + "images/bronze.png";
 
 /***/ },
 /* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/frog.png";
+	module.exports = __webpack_require__.p + "images/clown.png";
 
 /***/ },
 /* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/gold.png";
+	module.exports = __webpack_require__.p + "images/end_bg.png";
 
 /***/ },
 /* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/green_arrow.png";
+	module.exports = __webpack_require__.p + "images/frog.png";
 
 /***/ },
 /* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/hardcore.png";
+	module.exports = __webpack_require__.p + "images/gold.png";
 
 /***/ },
 /* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/hobofrog.png";
+	module.exports = __webpack_require__.p + "images/green_arrow.png";
 
 /***/ },
 /* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/jump.png";
+	module.exports = __webpack_require__.p + "images/hardcore.png";
 
 /***/ },
 /* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/king.png";
+	module.exports = __webpack_require__.p + "images/hobofrog.png";
 
 /***/ },
 /* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/level_two.jpg";
+	module.exports = __webpack_require__.p + "images/jump.png";
 
 /***/ },
 /* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/librarian.png";
+	module.exports = __webpack_require__.p + "images/king.png";
 
 /***/ },
 /* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/logo.png";
+	module.exports = __webpack_require__.p + "images/level_two.jpg";
 
 /***/ },
 /* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/lowest.png";
+	module.exports = __webpack_require__.p + "images/librarian.png";
 
 /***/ },
 /* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/mafia.png";
+	module.exports = __webpack_require__.p + "images/logo.png";
 
 /***/ },
 /* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/malnourished.png";
+	module.exports = __webpack_require__.p + "images/lowest.png";
 
 /***/ },
 /* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/oldman.png";
+	module.exports = __webpack_require__.p + "images/mafia.png";
 
 /***/ },
 /* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/player.png";
+	module.exports = __webpack_require__.p + "images/malnourished.png";
 
 /***/ },
 /* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/polywag.png";
+	module.exports = __webpack_require__.p + "images/oldman.png";
 
 /***/ },
 /* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/red_arrow.png";
+	module.exports = __webpack_require__.p + "images/player.png";
 
 /***/ },
 /* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/shadow.png";
+	module.exports = __webpack_require__.p + "images/polywag.png";
 
 /***/ },
 /* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/shadows.png";
+	module.exports = __webpack_require__.p + "images/red_arrow.png";
 
 /***/ },
 /* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/silver.png";
+	module.exports = __webpack_require__.p + "images/shadow.png";
 
 /***/ },
 /* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/silver_two.png";
+	module.exports = __webpack_require__.p + "images/shadows.png";
 
 /***/ },
 /* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/spotlight.png";
+	module.exports = __webpack_require__.p + "images/silver.png";
 
 /***/ },
 /* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/tadpoleanimate.png";
+	module.exports = __webpack_require__.p + "images/silver_two.png";
 
 /***/ },
 /* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/timer.png";
+	module.exports = __webpack_require__.p + "images/spotlight.png";
 
 /***/ },
 /* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/title.png";
+	module.exports = __webpack_require__.p + "images/tadpoleanimate.png";
 
 /***/ },
 /* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/training.jpg";
+	module.exports = __webpack_require__.p + "images/timer.png";
 
 /***/ },
 /* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/white_arrow.png";
+	module.exports = __webpack_require__.p + "images/title.png";
 
 /***/ },
 /* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/yellow_arrow.png";
+	module.exports = __webpack_require__.p + "images/training.jpg";
 
 /***/ },
 /* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var map = {
-		"./dropletts.mp3": 162,
-		"./dropletts.wav": 163,
-		"./dropletts_02.wav": 164,
-		"./nom.wav": 165,
-		"./polymorphic_game_loop.mp3": 166,
-		"./polymorphic_game_loop.wav": 167,
-		"./polymorphic_intro_music.mp3": 168
-	};
-	function webpackContext(req) {
-		return __webpack_require__(webpackContextResolve(req));
-	};
-	function webpackContextResolve(req) {
-		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
-	};
-	webpackContext.keys = function webpackContextKeys() {
-		return Object.keys(map);
-	};
-	webpackContext.resolve = webpackContextResolve;
-	module.exports = webpackContext;
-	webpackContext.id = 161;
-
+	module.exports = __webpack_require__.p + "images/white_arrow.png";
 
 /***/ },
 /* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "sounds/dropletts.mp3";
+	module.exports = __webpack_require__.p + "images/yellow_arrow.png";
 
 /***/ },
 /* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "sounds/dropletts.wav";
-
-/***/ },
-/* 164 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "sounds/dropletts_02.wav";
-
-/***/ },
-/* 165 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "sounds/nom.wav";
-
-/***/ },
-/* 166 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "sounds/polymorphic_game_loop.mp3";
-
-/***/ },
-/* 167 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "sounds/polymorphic_game_loop.wav";
-
-/***/ },
-/* 168 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "sounds/polymorphic_intro_music.mp3";
-
-/***/ },
-/* 169 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var map = {
-		"./animations.json": 170,
-		"./entities.json": 171,
-		"./frogs.json": 103,
-		"./inputs.json": 172,
-		"./prefabs.json": 173,
-		"./scenes.json": 174,
-		"./systems.json": 175
+		"./dropletts.mp3": 164,
+		"./dropletts.wav": 165,
+		"./dropletts_02.wav": 166,
+		"./nom.wav": 167,
+		"./polymorphic_game_loop.mp3": 168,
+		"./polymorphic_game_loop.wav": 169,
+		"./polymorphic_intro_music.mp3": 170
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -10372,11 +10317,80 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 169;
+	webpackContext.id = 163;
 
 
 /***/ },
+/* 164 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/dropletts.mp3";
+
+/***/ },
+/* 165 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/dropletts.wav";
+
+/***/ },
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/dropletts_02.wav";
+
+/***/ },
+/* 167 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/nom.wav";
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/polymorphic_game_loop.mp3";
+
+/***/ },
+/* 169 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/polymorphic_game_loop.wav";
+
+/***/ },
 /* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/polymorphic_intro_music.mp3";
+
+/***/ },
+/* 171 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./animations.json": 172,
+		"./entities.json": 173,
+		"./frogs.json": 103,
+		"./inputs.json": 174,
+		"./prefabs.json": 175,
+		"./scenes.json": 176,
+		"./systems.json": 177
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 171;
+
+
+/***/ },
+/* 172 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10504,7 +10518,7 @@
 	};
 
 /***/ },
-/* 171 */
+/* 173 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10523,6 +10537,7 @@
 			{
 				"id": 1,
 				"background": true,
+				"viewPort": true,
 				"position": {
 					"x": 0,
 					"y": 0,
@@ -10571,6 +10586,50 @@
 					"loop": true,
 					"speed": 1,
 					"name": "swim"
+				}
+			},
+			{
+				"id": 3,
+				"name": "controls",
+				"size": {
+					"width": 320,
+					"height": 200
+				},
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 0
+				},
+				"match": {
+					"id": 1,
+					"offsetX": 25,
+					"offsetY": 725,
+					"offsetZ": 1
+				},
+				"image": {
+					"name": "Controls.png"
+				}
+			},
+			{
+				"id": 4,
+				"name": "play",
+				"size": {
+					"width": 220,
+					"height": 70
+				},
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 15
+				},
+				"matchCenterX": {
+					"id": 1
+				},
+				"matchCenterY": {
+					"id": 1
+				},
+				"image": {
+					"name": "PlayButton.png"
 				}
 			}
 		],
@@ -10893,7 +10952,7 @@
 	};
 
 /***/ },
-/* 172 */
+/* 174 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10955,10 +11014,6 @@
 			],
 			"start": [
 				{
-					"device": "mouse",
-					"button": 0
-				},
-				{
 					"device": "gamepad",
 					"button": "a"
 				}
@@ -10967,7 +11022,7 @@
 	};
 
 /***/ },
-/* 173 */
+/* 175 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -11057,7 +11112,7 @@
 	};
 
 /***/ },
-/* 174 */
+/* 176 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -11076,7 +11131,7 @@
 	};
 
 /***/ },
-/* 175 */
+/* 177 */
 /***/ function(module, exports) {
 
 	module.exports = {
