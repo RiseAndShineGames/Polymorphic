@@ -1,7 +1,7 @@
 "use strict";
 
 var point, angle, opposite, adjacent, distance;
-var collidables, vp, vs, vc, op, os, oc, i, image, size = { "width": 20, "height": 45 };
+var collidables, vp, vs, vc, op, os, oc, i, image;
 var radius, type;
 var viewPort = 5;
 module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
@@ -30,19 +30,18 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
                 image = new Image();
                 switch (type) {
                     case 1:
-                        image.src = "../../../images/yellow_arrow.png";
+                        image.src = "./src/images/yellow_arrow.png";
                         break;
                     case 2:
-                        image.src = "../../../images/green_arrow.png";
+                        image.src = "./src/images/green_arrow.png";
                         break;
                     case 3:
-                        image.src = "../../../images/blue_arrow.png";
+                        image.src = "./src/images/blue_arrow.png";
                         break;
                     case 4:
-                        image.src = "../../../images/red_arrow.png";
+                        image.src = "red_arrow.png";
                         break;
                     default:
-                        image.src = "../../../images/red_arrow.png";
                         break;
                 }
                 opposite = oc.y - vc.y;
@@ -51,12 +50,7 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
                 point = getPointOnCircle(vc, angle, radius);
                 distance = Math.sqrt((vc.x - oc.x) * (vc.x - oc.x) + (vc.y - oc.y) * (vc.y - oc.y));
                 if (distance > radius) {
-                    angle += Math.PI;
-                    context.translate(point.x, point.y);
-                    context.rotate(angle);
-                    context.drawImage(image, -size.width * 0.5, -size.height * 0.5, size.width, size.height);
-                    context.rotate(-angle);
-                    context.translate(-point.x, -point.y);
+                    context.drawImage(image, point.x, point.y);
                 }
             }
         }
