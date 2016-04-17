@@ -178,7 +178,7 @@
                 "height": 2880
             },
             "image": {
-                "name": "training.jpg",
+                "name": "TrainingBG.jpg",
                 "sourceWidth": 1280,
                 "sourceHeight": 960,
                 "destinationWidth": 3840,

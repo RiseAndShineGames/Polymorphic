@@ -60,7 +60,7 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
             game.entities.set(camera,"round_score",game.entities.get(camera,"round_score") + otherVal);
             config.origin = other;
             particles.create(game, config);
-            game.sounds.play("nom.wav");
+            game.sounds.play("dropletts.wav");
             game.entities.destroy(other);
             if (otherType !== indicatorType) {
                 game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });

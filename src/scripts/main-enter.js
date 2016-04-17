@@ -1,6 +1,7 @@
 "use strict";
 var scores, bounds, containerImage,indicatorImage, playerPosition, playerSize, playerAnimation, timers, heartAnimation, cameraPosition, camera = 0, container = 3, indicator = 4, player = 1, heart = 6;
 module.exports = function(game) { // eslint-disable-line no-unused-vars
+    game.sounds.play("polymorphic_game_loop.wav");
     bounds = game.entities.get(container,"size");
     containerImage = game.entities.get(container, "image");
     game.scaleCanvasToFitRectangle(1280,960);
@@ -36,13 +37,14 @@ module.exports = function(game) { // eslint-disable-line no-unused-vars
         scores.round1 = game.arguments["scores"].round1;
         scores.round2 = game.arguments["scores"].round2;
         scores.round3 = game.arguments["scores"].round3;
+        console.log(game.arguments["scores"]);
     } else {
         scores.round1 = 0;
         scores.round2 = 0;
         scores.round3 = 0;
     }
     if (game.arguments.round > 1) {
-        containerImage.name = "level_two.jpg";
+        containerImage.name = "GameBG.jpg";
         playerAnimation.name = "polywag";
         playerSize.width = 251;
         playerSize.height = 251;
