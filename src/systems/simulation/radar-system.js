@@ -30,16 +30,16 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
                 image = new Image();
                 switch (type) {
                     case 1:
-                        image.src = "./src/images/yellow_arrow.png";
+                        image.src = "../../src/images/yellow_arrow.png";
                         break;
                     case 2:
-                        image.src = "./src/images/green_arrow.png";
+                        image.src = "../../src/images/green_arrow.png";
                         break;
                     case 3:
-                        image.src = "./src/images/blue_arrow.png";
+                        image.src = "../../src/images/blue_arrow.png";
                         break;
                     case 4:
-                        image.src = "red_arrow.png";
+                        image.src = "../../images/white_arrow.png";
                         break;
                     default:
                         break;

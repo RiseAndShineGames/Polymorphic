@@ -6,8 +6,7 @@
         },
         {
             "name": "splat-ecs/lib/systems/advance-timers",
-            "scenes": "all"
-        },
+            "scenes": "all" },
         {
             "name": "splat-ecs/lib/systems/advance-animations",
             "scenes": "all"
@@ -92,7 +91,7 @@
         },
         {
             "name": "splat-ecs/lib/systems/draw-rectangles",
-            "scenes": "title"
+            "scenes": ""
         },
         {
             "name": "./systems/renderer/crop-game",
@@ -112,7 +111,7 @@
         },
         {
             "name": "splat-ecs/lib/systems/draw-frame-rate",
-            "scenes": "title"
+            "scenes": ""
         },
         {
             "name": "splat-ecs/lib/systems/revert-shake",

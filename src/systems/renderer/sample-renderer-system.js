@@ -42,7 +42,7 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
                         image.src = "./images/red_arrow.png";
                         break;
                     default:
-                        image.src = "./images/red_arrow.png";
+                        image.src = "./images/white_arrow.png";
                         break;
                 }
                 opposite = oc.y - vc.y;

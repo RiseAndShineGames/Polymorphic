@@ -78,11 +78,11 @@
 	var imageContext = __webpack_require__(103);
 	var imageManifest = generateManifest(imageContext.keys(), "images");
 
-	var soundContext = __webpack_require__(124);
+	var soundContext = __webpack_require__(132);
 	var soundManifest = generateManifest(soundContext.keys(), "sounds");
 
 	var localDataPath = "./data";
-	var localDataRequire = __webpack_require__(125);
+	var localDataRequire = __webpack_require__(134);
 
 	function customRequire(path) {
 	  if (path.indexOf(splatSystemPath) === 0) {
@@ -9101,7 +9101,7 @@
 	                        image.src = "./images/red_arrow.png";
 	                        break;
 	                    default:
-	                        image.src = "./images/red_arrow.png";
+	                        image.src = "./images/white_arrow.png";
 	                        break;
 	                }
 	                opposite = oc.y - vc.y;
@@ -9147,7 +9147,7 @@
 	config.lifeSpanMin = 500;
 	config.lifeSpanMax = 750;
 
-	var follow, angle, entitySize, otherSize, otherPos, collisions, other, i, otherVal, otherType, indicatorType, camera = 0, player = 1, indicator = 4; // eslint-disable-line no-unused-vars
+	var follow, angle, entitySize, otherSize, otherPos, collisions, other, i, otherVal, otherType, indicatorType, camera = 0, player = 1, indicator = 4, heart = 6; // eslint-disable-line no-unused-vars
 
 
 	function newPosition(entity, other, game) {
@@ -9155,15 +9155,21 @@
 	    entitySize = game.entities.get(entity, "size");
 	    otherSize = game.entities.get(other, "size");
 	    otherPos = game.entities.get(other, "position");
-	    return {
-	        "x": otherPos.x + (otherSize.width / 2) - (entitySize.width / 2) + ((Math.cos(angle) * otherSize.width / 4)) ,
-	        "y": otherPos.y + (otherSize.height / 2) - (entitySize.height / 2) + ((Math.sin(angle) * otherSize.height / 4))
-	    };
+	    var pos = game.entities.get(entity, "position");
+	    if (game.entities.get(entity, "heart")) {
+	        pos.x = otherPos.x + (otherSize.width / 2) - (entitySize.width / 2) + ((Math.cos(angle) * otherSize.width / 4.5));
+	        pos.y = otherPos.y + (otherSize.height / 2) - (entitySize.height / 2) + ((Math.sin(angle) * otherSize.height / 3.5));
+	    } else {
+	        pos.x = otherPos.x + (otherSize.width / 2) - (entitySize.width / 2) + ((Math.cos(angle) * otherSize.width / 3));
+	        pos.y = otherPos.y + (otherSize.height / 2) - (entitySize.height / 2) + ((Math.sin(angle) * otherSize.height / 3));
+	    }
+	    return pos;
 	}
 	module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
 	    ecs.addEach(function(entity, elapsed) { // eslint-disable-line no-unused-vars
 	        follow = game.entities.get(entity, "hitbox_for");
 	        game.entities.set(entity, "position", newPosition(entity, follow, game));
+	        game.entities.set(heart, "position", newPosition(heart, follow, game));
 	        collisions = game.entities.get(entity, "collisions");
 	        indicatorType = game.entities.get(indicator,"type");
 	        for (i = 0; i < collisions.length; ++i) {
@@ -9190,6 +9196,7 @@
 	            game.entities.set(camera,"round_score",game.entities.get(camera,"round_score") + otherVal);
 	            config.origin = other;
 	            particles.create(game, config);
+	            game.sounds.play("nom.wav");
 	            game.entities.destroy(other);
 	            //game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });
 	        }
@@ -9233,16 +9240,16 @@
 	                image = new Image();
 	                switch (type) {
 	                    case 1:
-	                        image.src = "./src/images/yellow_arrow.png";
+	                        image.src = "../../src/images/yellow_arrow.png";
 	                        break;
 	                    case 2:
-	                        image.src = "./src/images/green_arrow.png";
+	                        image.src = "../../src/images/green_arrow.png";
 	                        break;
 	                    case 3:
-	                        image.src = "./src/images/blue_arrow.png";
+	                        image.src = "../../src/images/blue_arrow.png";
 	                        break;
 	                    case 4:
-	                        image.src = "red_arrow.png";
+	                        image.src = "../../images/white_arrow.png";
 	                        break;
 	                    default:
 	                        break;
@@ -9434,16 +9441,17 @@
 /***/ function(module, exports) {
 
 	"use strict";
-
-	var scores, bounds,playerPosition, playerSize, cameraPosition, camera = 0, container = 3, player = 1;
-
+	var scores, bounds, containerImage, playerPosition, playerSize, playerAnimation, heartAnimation, cameraPosition, camera = 0, container = 3, player = 1, heart = 6;
 	module.exports = function(game) { // eslint-disable-line no-unused-vars
 	    bounds = game.entities.get(container,"size");
+	    containerImage = game.entities.get(container, "image");
+	    game.scaleCanvasToFitRectangle(1280,960);
 	    playerPosition = game.entities.get(player,"position");
 	    playerSize = game.entities.get(player,"size");
 	    game.entities.set(player, "rotation", { "angle": -Math.PI * 0.5 });
+	    playerAnimation = game.entities.get(player, "animation");
+	    heartAnimation = game.entities.get(heart, "animation");
 	    cameraPosition = game.entities.get(camera,"position");
-	    game.scaleCanvasToFitRectangle(1280,960);
 	    scores = game.entities.get(camera,"scores");
 	    if (game.arguments["scores"]) {
 	        scores.round1 = game.arguments["scores"].round1;
@@ -9453,6 +9461,18 @@
 	        scores.round1 = 0;
 	        scores.round2 = 0;
 	        scores.round3 = 0;
+	    }
+	    if (game.arguments.round > 1) {
+	        containerImage.name = "level_two.jpg";
+	        playerAnimation.name = "polywag";
+	        playerSize.width = 251;
+	        playerSize.height = 251;
+	        heartAnimation.name = "trump_heart";
+	    } else {
+	        playerAnimation.name = "swim";
+	        heartAnimation.name = "";
+	        playerSize.width = 130;
+	        playerSize.height = 130;
 	    }
 
 	    playerPosition.x = bounds.width / 2 - playerSize.width / 2;
@@ -9571,14 +9591,22 @@
 		"./babyparticles.png": 113,
 		"./bg.jpg": 114,
 		"./blue_arrow.png": 115,
-		"./green_arrow.png": 116,
-		"./logo.png": 117,
-		"./player.png": 118,
-		"./red_arrow.png": 119,
-		"./tadpoleanimate.png": 120,
-		"./title.png": 121,
-		"./training.jpg": 122,
-		"./yellow_arrow.png": 123
+		"./bronze.png": 116,
+		"./gold.png": 117,
+		"./green_arrow.png": 118,
+		"./level_two.jpg": 119,
+		"./logo.png": 120,
+		"./lowest.png": 121,
+		"./player.png": 122,
+		"./polywag.png": 123,
+		"./red_arrow.png": 124,
+		"./silver.png": 125,
+		"./silver_two.png": 126,
+		"./tadpoleanimate.png": 127,
+		"./title.png": 128,
+		"./training.jpg": 129,
+		"./white_arrow.png": 130,
+		"./yellow_arrow.png": 131
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -9670,74 +9698,104 @@
 /* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/green_arrow.png";
+	module.exports = __webpack_require__.p + "images/bronze.png";
 
 /***/ },
 /* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/logo.png";
+	module.exports = __webpack_require__.p + "images/gold.png";
 
 /***/ },
 /* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/player.png";
+	module.exports = __webpack_require__.p + "images/green_arrow.png";
 
 /***/ },
 /* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/red_arrow.png";
+	module.exports = __webpack_require__.p + "images/level_two.jpg";
 
 /***/ },
 /* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/tadpoleanimate.png";
+	module.exports = __webpack_require__.p + "images/logo.png";
 
 /***/ },
 /* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/title.png";
+	module.exports = __webpack_require__.p + "images/lowest.png";
 
 /***/ },
 /* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/training.jpg";
+	module.exports = __webpack_require__.p + "images/player.png";
 
 /***/ },
 /* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__.p + "images/yellow_arrow.png";
+	module.exports = __webpack_require__.p + "images/polywag.png";
 
 /***/ },
 /* 124 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-	function webpackContext(req) {
-		throw new Error("Cannot find module '" + req + "'.");
-	}
-	webpackContext.keys = function() { return []; };
-	webpackContext.resolve = webpackContext;
-	module.exports = webpackContext;
-	webpackContext.id = 124;
-
+	module.exports = __webpack_require__.p + "images/red_arrow.png";
 
 /***/ },
 /* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = __webpack_require__.p + "images/silver.png";
+
+/***/ },
+/* 126 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/silver_two.png";
+
+/***/ },
+/* 127 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/tadpoleanimate.png";
+
+/***/ },
+/* 128 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/title.png";
+
+/***/ },
+/* 129 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/training.jpg";
+
+/***/ },
+/* 130 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/white_arrow.png";
+
+/***/ },
+/* 131 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "images/yellow_arrow.png";
+
+/***/ },
+/* 132 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var map = {
-		"./animations.json": 126,
-		"./entities.json": 127,
-		"./inputs.json": 128,
-		"./prefabs.json": 129,
-		"./scenes.json": 130,
-		"./systems.json": 131
+		"./nom.wav": 133
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -9750,11 +9808,43 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 125;
+	webpackContext.id = 132;
 
 
 /***/ },
-/* 126 */
+/* 133 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "sounds/nom.wav";
+
+/***/ },
+/* 134 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var map = {
+		"./animations.json": 135,
+		"./entities.json": 136,
+		"./inputs.json": 137,
+		"./prefabs.json": 138,
+		"./scenes.json": 139,
+		"./systems.json": 140
+	};
+	function webpackContext(req) {
+		return __webpack_require__(webpackContextResolve(req));
+	};
+	function webpackContextResolve(req) {
+		return map[req] || (function() { throw new Error("Cannot find module '" + req + "'.") }());
+	};
+	webpackContext.keys = function webpackContextKeys() {
+		return Object.keys(map);
+	};
+	webpackContext.resolve = webpackContextResolve;
+	module.exports = webpackContext;
+	webpackContext.id = 134;
+
+
+/***/ },
+/* 135 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9775,11 +9865,114 @@
 					}
 				}
 			}
+		],
+		"polywag": [
+			{
+				"filmstripFrames": 31,
+				"time": 30,
+				"properties": {
+					"image": {
+						"name": "polywag.png",
+						"sourceX": 0,
+						"sourceY": 0,
+						"sourceWidth": 11439,
+						"sourceHeight": 369,
+						"destinationWidth": 251,
+						"destinationHeight": 185,
+						"destinationY": 0
+					}
+				}
+			}
+		],
+		"trump_heart": [
+			{
+				"filmstripFrames": 31,
+				"time": 25,
+				"properties": {
+					"image": {
+						"name": "lowest.png",
+						"sourceX": 0,
+						"sourceY": 0,
+						"sourceWidth": 7471,
+						"sourceHeight": 237,
+						"destinationWidth": 60,
+						"destinationHeight": 60
+					}
+				}
+			}
+		],
+		"bronze_heart": [
+			{
+				"filmstripFrames": 31,
+				"time": 25,
+				"properties": {
+					"image": {
+						"name": "bronze.png",
+						"sourceX": 0,
+						"sourceY": 0,
+						"sourceWidth": 7316,
+						"sourceHeight": 236,
+						"destinationWidth": 60,
+						"destinationHeight": 60
+					}
+				}
+			}
+		],
+		"silver_heart": [
+			{
+				"filmstripFrames": 31,
+				"time": 25,
+				"properties": {
+					"image": {
+						"name": "silver.png",
+						"sourceX": 0,
+						"sourceY": 0,
+						"sourceWidth": 7316,
+						"sourceHeight": 236,
+						"destinationWidth": 60,
+						"destinationHeight": 60
+					}
+				}
+			}
+		],
+		"shiny_heart": [
+			{
+				"filmstripFrames": 31,
+				"time": 25,
+				"properties": {
+					"image": {
+						"name": "silver_two.png",
+						"sourceX": 0,
+						"sourceY": 0,
+						"sourceWidth": 7316,
+						"sourceHeight": 236,
+						"destinationWidth": 60,
+						"destinationHeight": 60
+					}
+				}
+			}
+		],
+		"gold_heart": [
+			{
+				"filmstripFrames": 31,
+				"time": 25,
+				"properties": {
+					"image": {
+						"name": "gold.png",
+						"sourceX": 0,
+						"sourceY": 0,
+						"sourceWidth": 7316,
+						"sourceHeight": 236,
+						"destinationWidth": 60,
+						"destinationHeight": 60
+					}
+				}
+			}
 		]
 	};
 
 /***/ },
-/* 127 */
+/* 136 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -9895,8 +10088,8 @@
 					"z": 1
 				},
 				"size": {
-					"width": 130,
-					"height": 130
+					"width": 251,
+					"height": 185
 				},
 				"velocity": {
 					"x": 0,
@@ -9924,7 +10117,7 @@
 					"frame": 0,
 					"loop": true,
 					"speed": 0,
-					"name": "swim"
+					"name": "polywag"
 				},
 				"constrainPosition": {
 					"id": 3
@@ -10006,12 +10199,32 @@
 				"matchCenterY": {
 					"id": 0
 				}
+			},
+			{
+				"id": 6,
+				"heart": true,
+				"position": {
+					"x": 0,
+					"y": 0,
+					"z": 20
+				},
+				"size": {
+					"width": 60,
+					"height": 60
+				},
+				"animation": {
+					"time": 0,
+					"frame": 0,
+					"loop": true,
+					"speed": 0.4,
+					"name": ""
+				}
 			}
 		]
 	};
 
 /***/ },
-/* 128 */
+/* 137 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10081,7 +10294,7 @@
 	};
 
 /***/ },
-/* 129 */
+/* 138 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10113,7 +10326,7 @@
 				"height": 20
 			},
 			"image": {
-				"name": "babyparticles.png"
+				"name": "BabyFood.png"
 			}
 		},
 		"red_particle": {
@@ -10171,7 +10384,7 @@
 	};
 
 /***/ },
-/* 130 */
+/* 139 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10186,7 +10399,7 @@
 	};
 
 /***/ },
-/* 131 */
+/* 140 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -10283,7 +10496,7 @@
 			},
 			{
 				"name": "splat-ecs/lib/systems/draw-rectangles",
-				"scenes": "title"
+				"scenes": ""
 			},
 			{
 				"name": "./systems/renderer/crop-game",
@@ -10303,7 +10516,7 @@
 			},
 			{
 				"name": "splat-ecs/lib/systems/draw-frame-rate",
-				"scenes": "title"
+				"scenes": ""
 			},
 			{
 				"name": "splat-ecs/lib/systems/revert-shake",

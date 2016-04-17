@@ -14,5 +14,96 @@
                 "destinationY": 30
             }
         }
+    }],
+    "polywag": [{
+        "filmstripFrames": 31,
+        "time": 30,
+        "properties": {
+            "image": {
+                "name": "polywag.png",
+                "sourceX": 0,
+                "sourceY": 0,
+                "sourceWidth": 11439,
+                "sourceHeight": 369,
+                "destinationWidth": 251,
+                "destinationHeight": 185,
+                "destinationY": 0
+            }
+        }
+    }],
+    "trump_heart": [{
+        "filmstripFrames": 31,
+        "time": 25,
+        "properties": {
+            "image": {
+                "name": "lowest.png",
+                "sourceX": 0,
+                "sourceY": 0,
+                "sourceWidth": 7471,
+                "sourceHeight": 237,
+                "destinationWidth": 60,
+                "destinationHeight": 60
+            }
+        }
+    }],
+    "bronze_heart": [{
+        "filmstripFrames": 31,
+        "time": 25,
+        "properties": {
+            "image": {
+                "name": "bronze.png",
+                "sourceX": 0,
+                "sourceY": 0,
+                "sourceWidth": 7316,
+                "sourceHeight": 236,
+                "destinationWidth": 60,
+                "destinationHeight": 60
+            }
+        }
+    }],
+    "silver_heart": [{
+        "filmstripFrames": 31,
+        "time": 25,
+        "properties": {
+            "image": {
+                "name": "silver.png",
+                "sourceX": 0,
+                "sourceY": 0,
+                "sourceWidth": 7316,
+                "sourceHeight": 236,
+                "destinationWidth": 60,
+                "destinationHeight": 60
+            }
+        }
+    }],
+    "shiny_heart": [{
+        "filmstripFrames": 31,
+        "time": 25,
+        "properties": {
+            "image": {
+                "name": "silver_two.png",
+                "sourceX": 0,
+                "sourceY": 0,
+                "sourceWidth": 7316,
+                "sourceHeight": 236,
+                "destinationWidth": 60,
+                "destinationHeight": 60
+            }
+        }
+    }],
+    "gold_heart": [{
+        "filmstripFrames": 31,
+        "time": 25,
+        "properties": {
+            "image": {
+                "name": "gold.png",
+                "sourceX": 0,
+                "sourceY": 0,
+                "sourceWidth": 7316,
+                "sourceHeight": 236,
+                "destinationWidth": 60,
+                "destinationHeight": 60
+            }
+        }
     }]
 }
