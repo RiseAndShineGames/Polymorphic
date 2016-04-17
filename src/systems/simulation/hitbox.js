@@ -63,10 +63,10 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
             game.entities.set(camera,"round_score",game.entities.get(camera,"round_score") + otherVal);
             config.origin = other;
             particles.create(game, config);
-            game.sounds.play("dropletts.wav");
+            game.sounds.play("dropletts.mp3");
             game.entities.destroy(other);
             if (otherType !== indicatorType) {
-                game.entities.set(camera, "shake", { "duration": 250, "magnitude": 25 });
+                game.entities.set(camera, "shake", { "duration": 250, "magnitude": 35 });
             } else {
                 oldType = indicatorType;
                 newType = Math.floor(Math.random() * 4) + 1;

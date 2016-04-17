@@ -31,6 +31,22 @@
             }
         }
     }],
+    "midpoint": [{
+        "filmstripFrames": 31,
+        "time": 30,
+        "properties": {
+            "image": {
+                "name": "midpoint.png",
+                "sourceX": 0,
+                "sourceY": 0,
+                "sourceWidth": 7223,
+                "sourceHeight": 147,
+                "destinationWidth": 233,
+                "destinationHeight": 147,
+                "destinationY": 30
+            }
+        }
+    }],
     "trump_heart": [{
         "filmstripFrames": 31,
         "time": 25,

@@ -130,6 +130,12 @@
                     "time": 0,
                     "max": 25,
                     "script": "./scripts/decelerate"
+                },
+                "bubbles": {
+                    "running": true,
+                    "time": 0,
+                    "max": 100,
+                    "script": "./scripts/bubbles"
                 }
             },
             "angle_mod": 0.0185,
