@@ -210,7 +210,8 @@
             "viewPort": true,
             "position": {
                 "x": 0,
-                "y": 0
+                "y": 0,
+                "z": 15
             },
             "size": {
                 "width": 1280,
@@ -221,6 +222,9 @@
             },
             "matchCenterY": {
                 "id": 0
+            },
+            "image":{
+              "name": "spotlight.png"
             }
         },
         {
