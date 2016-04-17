@@ -138,6 +138,24 @@
             "image": {
                 "name": "BabyFood.png"
             }
+        },
+        {
+            "id": 5,
+            "viewPort": true,
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 1280,
+                "height": 960
+            },
+            "matchCenterX": {
+                "id": 0
+            },
+            "matchCenterY": {
+                "id": 0
+            }
         }
     ]
 }

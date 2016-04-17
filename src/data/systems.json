@@ -37,6 +37,10 @@
             "scenes": "all"
         },
         {
+            "name": "splat-ecs/lib/systems/match-center-y",
+            "scenes": "all"
+        },
+        {
             "name": "splat-ecs/lib/systems/decay-life-span",
             "scenes": "all"
         },
@@ -75,11 +79,15 @@
             "scenes": "all"
         },
         {
-            "name": "./systems/renderer/sample-renderer-system",
+            "name": "splat-ecs/lib/systems/draw-image",
             "scenes": "all"
         },
         {
-            "name": "splat-ecs/lib/systems/draw-image",
+            "name": "splat-ecs/lib/systems/draw-rectangles",
+            "scenes": "all"
+        },
+        {
+            "name": "./systems/renderer/sample-renderer-system",
             "scenes": "all"
         },
         {
