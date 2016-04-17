@@ -68,16 +68,14 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
             if (otherType !== indicatorType) {
                 game.entities.set(camera, "shake", { "duration": 250, "magnitude": 25 });
             } else {
-                oldType = indicatorType;
                 newType = Math.floor(Math.random() * 4) + 1;
-                game.entities.set(indicator,"type", (oldType !== newType ? newType : (newType % 4) + 1));
-                type = game.entities.get(indicator,"type");
+                game.entities.set(indicator,"type",newType);
                 switch (round) {
                     case 0:
                         game.entities.set(indicator,"type",0);
                         break;
                     default:
-                        switch (type) {
+                        switch (newType) {
                             case 1:
                                 indicatorImage.name = "YellowFood.png";
                                 break;

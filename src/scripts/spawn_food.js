@@ -1,6 +1,7 @@
 "use strict";
 var timers, food, position, bounds, type,round, image, size, container = 3, camera = 0;
 module.exports = function(entity, game) { // eslint-disable-line no-unused-vars
+	game.entities.set(camera,"numOfFood",game.entities.get(camera,"numOfFood") + 1);
 	timers = game.entities.get(entity,"timers");
 	food = game.instantiatePrefab("food");
 	position = game.entities.get(food,"position");
@@ -33,7 +34,9 @@ module.exports = function(entity, game) { // eslint-disable-line no-unused-vars
 					break;
 			}
 	}
-
+	if (game.entities.get(camera,"numOfFood") >= 12) {
+		timers["spawn_food"].max = 1500;
+	}
 	timers["spawn_food"].time = 0;
 	timers["spawn_food"].running = true;
 };
