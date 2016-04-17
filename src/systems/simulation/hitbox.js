@@ -11,7 +11,7 @@ config.arcWidth = Math.PI * 2;
 config.lifeSpanMin = 500;
 config.lifeSpanMax = 750;
 
-var follow, angle, entitySize, otherSize, otherPos, collisions, other, i, otherVal, otherType, indicatorType, camera = 0, player = 1, indicator = 4, heart = 6; // eslint-disable-line no-unused-vars
+var follow, angle, entitySize, otherSize, otherPos, collisions, round, other, i, indicatorImage, type, oldType, newType, otherVal, otherType, indicatorType, camera = 0, player = 1, indicator = 4, heart = 6; // eslint-disable-line no-unused-vars
 
 
 function newPosition(entity, other, game) {
@@ -36,6 +36,9 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
         game.entities.set(heart, "position", newPosition(heart, follow, game));
         collisions = game.entities.get(entity, "collisions");
         indicatorType = game.entities.get(indicator,"type");
+        round = game.entities.get(camera, "round");
+        indicatorImage = game.entities.get(indicator, "image");
+
         for (i = 0; i < collisions.length; ++i) {
             other = collisions[i];
             otherType = game.entities.get(other,"type");
@@ -64,6 +67,31 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
             game.entities.destroy(other);
             if (otherType !== indicatorType) {
                 game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });
+            } else {
+                oldType = indicatorType;
+                newType = Math.floor(Math.random() * 4) + 1;
+                game.entities.set(indicator,"type", (oldType !== newType ? newType : (newType % 4) + 1));
+                type = game.entities.get(indicator,"type");
+                switch (round) {
+                    case 0:
+                        game.entities.set(indicator,"type",0);
+                        break;
+                    default:
+                        switch (type) {
+                            case 1:
+                                indicatorImage.name = "YellowFood.png";
+                                break;
+                            case 2:
+                                indicatorImage.name = "GreenFood.png";
+                                break;
+                            case 3:
+                                indicatorImage.name = "BlueFood.png";
+                                break;
+                            case 4:
+                                indicatorImage.name = "RedFood.png";
+                                break;
+                        }
+                }
             }
         }
     }, "player_hitbox");
