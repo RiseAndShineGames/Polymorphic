@@ -106,6 +106,12 @@
             ]
         },
         {
+            "name": "./systems/renderer/draw-name",
+            "scenes": [
+                "end"
+            ]
+        },
+        {
             "name": "./systems/renderer/sample-renderer-system",
             "scenes": [
                 "main"

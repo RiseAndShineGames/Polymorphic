@@ -8,6 +8,6 @@
     },
     "end": {
         "first": true,
-        "onExit": "./scripts/end-enter"
+        "onEnter": "./scripts/end-enter"
     }
 }

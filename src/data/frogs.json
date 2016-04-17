@@ -1,0 +1,57 @@
+{
+    "donald": {
+        "name": "Donald Jump",
+        "subtitle": "We've Got the Best Lilypads",
+        "image": "jump.png"
+    },
+    "skele": {
+        "name": "Skelefrog",
+        "subtitle": "Eat! You're skin and bones!",
+        "image": "malnourished.png"
+    },
+    "hobo": {
+        "name": "Hobofrog",
+        "subtitle": "Will Jump 4 Food",
+        "image": "oldman.png"
+    },
+    "bozo": {
+        "name": "Bozo the Toad",
+        "subtitle": "The D Student of the Pond",
+        "image": "clown.png"
+    },
+    "lilly": {
+        "name": "Lillybrarian",
+        "subtitle": "Life Sucks and Then You Croak",
+        "image": "librarian.png"
+    },
+    "plain": {
+        "name": "Frog",
+        "subtitle": "You're Not Awful. You're Just Not Stellar",
+        "image": "frog.png"
+    },
+    "david": {
+        "name": "David Kroakie",
+        "subtitle": "I Will be King and You Will Be Queen... of the pond",
+        "image": "bowie.png"
+    },
+    "frog_topic": {
+        "name": "Frog Topic",
+        "subtitle": "Rock Out With Your Frog Out",
+        "image": "hardcore.png"
+    },
+    "arthur": {
+        "name": "Arthur Pondzerelli",
+        "subtitle": "We've Got a Badass Over Here",
+        "image": "badass.png"
+    },
+    "frog_cordileone": {
+        "name": "Frog Cordileone",
+        "subtitle": "The Pondfather",
+        "image": "mafia.png"
+    },
+    "king_frog": {
+        "name": "Lord Frogus IV",
+        "subtitle": "The King of the Pond",
+        "image": "king.png"
+    }
+}
