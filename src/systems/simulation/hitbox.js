@@ -1,6 +1,6 @@
 "use strict";
 
-var particles = require("../../../node_modules/splat-ecs/lib/particles.js");
+var particles = require("splat-ecs/lib/particles.js");
 var config = new particles.Config();
 config.qtyMin = 3;
 config.qtyMax = 6;
