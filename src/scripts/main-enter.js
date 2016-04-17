@@ -1,9 +1,12 @@
 "use strict";
+
 var scores, bounds,playerPosition, playerSize, cameraPosition, camera = 0, container = 3, player = 1;
+
 module.exports = function(game) { // eslint-disable-line no-unused-vars
     bounds = game.entities.get(container,"size");
     playerPosition = game.entities.get(player,"position");
     playerSize = game.entities.get(player,"size");
+    game.entities.set(player, "rotation", { "angle": -Math.PI * 0.5 });
     cameraPosition = game.entities.get(camera,"position");
     game.scaleCanvasToFitRectangle(1280,960);
     scores = game.entities.get(camera,"scores");

@@ -1,4 +1,70 @@
 {
+    "title": [
+        {
+            "id": 0,
+            "camera": true,
+            "strokeStyle": "white",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": -1
+            },
+            "matchCanvasSize": true
+        },
+        {
+            "id": 1,
+            "background": true,
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "size": {
+                "width": 1280,
+                "height": 960
+            },
+            "image": {
+                "name": "title.png"
+            }
+        },
+        {
+            "id": 2,
+            "player": true,
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 2
+            },
+            "size": {
+                "width": 130,
+                "height": 130
+            },
+            "velocity": {
+                "x": 0,
+                "y": 0
+            },
+            "timers": {
+                "intro": {
+                    "running": false,
+                    "time": 0,
+                    "max": 10,
+                    "script": "./scripts/intro"
+                }
+            },
+            "angle_mod": 0.0175,
+            "speed": 5,
+            "rotation": {
+                "angle": 0
+            },
+            "animation": {
+                "time": 0,
+                "frame": 0,
+                "loop": true,
+                "speed": 1,
+                "name": "swim"
+            }
+        }
+    ],
     "main": [
         {
             "id": 0,

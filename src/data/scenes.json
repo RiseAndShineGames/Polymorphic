@@ -1,7 +1,10 @@
 {
- "main": {
-  "first": true,
-  "onEnter": "./scripts/main-enter",
-  "onExit": "./scripts/main-exit"
- }
+    "title": {
+        "first": true,
+        "onEnter": "./scripts/title-enter"
+    },
+    "main": {
+        "onEnter": "./scripts/main-enter",
+        "onExit": "./scripts/main-exit"
+    }
 }

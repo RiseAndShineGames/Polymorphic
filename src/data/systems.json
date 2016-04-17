@@ -14,11 +14,11 @@
         },
         {
             "name": "splat-ecs/lib/systems/control-player",
-            "scenes": "all"
+            "scenes": ""
         },
         {
             "name": "splat-ecs/lib/systems/apply-movement-2d",
-            "scenes": "all"
+            "scenes": ""
         },
         {
             "name": "splat-ecs/lib/systems/apply-velocity",
@@ -26,7 +26,7 @@
         },
         {
             "name": "splat-ecs/lib/systems/apply-friction",
-            "scenes": "all"
+            "scenes": ""
         },
         {
             "name": "splat-ecs/lib/systems/match-parent",
@@ -58,11 +58,19 @@
         },
         {
             "name": "./systems/simulation/sample-simulation-system",
-            "scenes": "all"
+            "scenes": [
+                "main"
+            ]
         },
         {
             "name": "./systems/simulation/hitbox",
             "scenes": "all"
+        },
+        {
+            "name": "./systems/simulation/title",
+            "scenes": [
+                "title"
+            ]
         }
     ],
     "renderer": [
@@ -84,20 +92,19 @@
         },
         {
             "name": "splat-ecs/lib/systems/draw-rectangles",
-            "scenes": "all"
+            "scenes": "title"
         },
         {
             "name": "./systems/renderer/crop-game",
-            "scenes": "all"
+            "scenes": [
+                "main"
+            ]
         },
         {
             "name": "./systems/renderer/sample-renderer-system",
-            "scenes": "all"
-        },
-        
-        {
-            "name": "splat-ecs/lib/systems/draw-rectangles",
-            "scenes": "none"
+            "scenes": [
+                "main"
+            ]
         },
         {
             "name": "splat-ecs/lib/systems/viewport-reset",
@@ -105,7 +112,7 @@
         },
         {
             "name": "splat-ecs/lib/systems/draw-frame-rate",
-            "scenes": ""
+            "scenes": "title"
         },
         {
             "name": "splat-ecs/lib/systems/revert-shake",
