@@ -9267,16 +9267,14 @@
 	            if (otherType !== indicatorType) {
 	                game.entities.set(camera, "shake", { "duration": 250, "magnitude": 25 });
 	            } else {
-	                oldType = indicatorType;
 	                newType = Math.floor(Math.random() * 4) + 1;
-	                game.entities.set(indicator,"type", (oldType !== newType ? newType : (newType % 4) + 1));
-	                type = game.entities.get(indicator,"type");
+	                game.entities.set(indicator,"type",newType);
 	                switch (round) {
 	                    case 0:
 	                        game.entities.set(indicator,"type",0);
 	                        break;
 	                    default:
-	                        switch (type) {
+	                        switch (newType) {
 	                            case 1:
 	                                indicatorImage.name = "YellowFood.png";
 	                                break;
@@ -9835,6 +9833,7 @@
 	"use strict";
 	var timers, food, position, bounds, type,round, image, size, container = 3, camera = 0;
 	module.exports = function(entity, game) { // eslint-disable-line no-unused-vars
+		game.entities.set(camera,"numOfFood",game.entities.get(camera,"numOfFood") + 1);
 		timers = game.entities.get(entity,"timers");
 		food = game.instantiatePrefab("food");
 		position = game.entities.get(food,"position");
@@ -9867,7 +9866,9 @@
 						break;
 				}
 		}
-
+		if (game.entities.get(camera,"numOfFood") >= 12) {
+			timers["spawn_food"].max = 1500;
+		}
 		timers["spawn_food"].time = 0;
 		timers["spawn_food"].running = true;
 	};
@@ -10557,7 +10558,7 @@
 				"position": {
 					"x": 0,
 					"y": 0,
-					"z": 2
+					"z": 3
 				},
 				"size": {
 					"width": 130,
@@ -10620,7 +10621,7 @@
 				"position": {
 					"x": 0,
 					"y": 0,
-					"z": 15
+					"z": 2
 				},
 				"matchCenterX": {
 					"id": 1
@@ -10648,13 +10649,13 @@
 					"spawn_food": {
 						"running": true,
 						"time": 0,
-						"max": 1500,
+						"max": 1,
 						"script": "./scripts/spawn_food"
 					},
 					"end_level": {
 						"running": true,
 						"time": 0,
-						"max": 30000,
+						"max": 15000,
 						"script": "./scripts/advance_game"
 					},
 					"change_indicator": {
@@ -10674,7 +10675,8 @@
 					"round3": 0
 				},
 				"round_score": 0,
-				"round": 0
+				"round": 0,
+				"numOfFood": 0
 			},
 			{
 				"id": 1,
