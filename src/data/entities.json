@@ -242,6 +242,26 @@
                 "speed": 0.4,
                 "name": ""
             }
+        },
+        {
+            "id": 7,
+            "timer": true,
+            "position": {
+                "x": 0,
+                "y": 0
+            },
+            "size": {
+                "width": 200,
+                "height": 200
+            },
+            "match": {
+                "id": 5,
+                "offsetX": 1000,
+                "offsetY": 750
+            },
+            "image": {
+                "name": "timer.png"
+            }
         }
     ]
 }

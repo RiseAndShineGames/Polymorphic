@@ -100,6 +100,12 @@
             ]
         },
         {
+            "name": "./systems/renderer/draw-timer",
+            "scenes": [
+                "main"
+            ]
+        },
+        {
             "name": "./systems/renderer/sample-renderer-system",
             "scenes": [
                 "main"
