@@ -48,7 +48,7 @@ module.exports = function(game) { // eslint-disable-line no-unused-vars
         playerAnimation.name = "polywag";
         playerSize.width = 251;
         playerSize.height = 251;
-        heartAnimation.name = "trump_heart";
+        heartAnimation.name = "silver";
     } else {
         playerAnimation.name = "swim";
         heartAnimation.name = "";
