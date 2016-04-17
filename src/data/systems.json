@@ -84,7 +84,7 @@
         },
         {
             "name": "splat-ecs/lib/systems/draw-rectangles",
-            "scenes": "all"
+            "scenes": ""
         },
         {
             "name": "./systems/renderer/crop-game",

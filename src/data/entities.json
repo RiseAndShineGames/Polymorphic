@@ -156,6 +156,26 @@
             "matchCenterY": {
                 "id": 0
             }
+        },
+        {
+            "id": 6,
+            "heart": true,
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 20
+            },
+            "size": {
+                "width": 60,
+                "height": 60
+            },
+            "animation": {
+                "time": 0,
+                "frame": 0,
+                "loop": true,
+                "speed": 0.4,
+                "name": ""
+            }
         }
     ]
 }

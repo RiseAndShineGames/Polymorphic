@@ -11,7 +11,7 @@ config.arcWidth = Math.PI * 2;
 config.lifeSpanMin = 500;
 config.lifeSpanMax = 750;
 
-var follow, angle, entitySize, otherSize, otherPos, collisions, other, i, otherVal, otherType, indicatorType, camera = 0, player = 1, indicator = 4; // eslint-disable-line no-unused-vars
+var follow, angle, entitySize, otherSize, otherPos, collisions, other, i, otherVal, otherType, indicatorType, camera = 0, player = 1, indicator = 4, heart = 6; // eslint-disable-line no-unused-vars
 
 
 function newPosition(entity, other, game) {
@@ -19,15 +19,21 @@ function newPosition(entity, other, game) {
     entitySize = game.entities.get(entity, "size");
     otherSize = game.entities.get(other, "size");
     otherPos = game.entities.get(other, "position");
-    return {
-        "x": otherPos.x + (otherSize.width / 2) - (entitySize.width / 2) + ((Math.cos(angle) * otherSize.width / 4)) ,
-        "y": otherPos.y + (otherSize.height / 2) - (entitySize.height / 2) + ((Math.sin(angle) * otherSize.height / 4))
-    };
+    var pos = game.entities.get(entity, "position");
+    if (game.entities.get(entity, "heart")) {
+        pos.x = otherPos.x + (otherSize.width / 2) - (entitySize.width / 2) + ((Math.cos(angle) * otherSize.width / 4.5));
+        pos.y = otherPos.y + (otherSize.height / 2) - (entitySize.height / 2) + ((Math.sin(angle) * otherSize.height / 3.5));
+    } else {
+        pos.x = otherPos.x + (otherSize.width / 2) - (entitySize.width / 2) + ((Math.cos(angle) * otherSize.width / 3));
+        pos.y = otherPos.y + (otherSize.height / 2) - (entitySize.height / 2) + ((Math.sin(angle) * otherSize.height / 3));
+    }
+    return pos;
 }
 module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
     ecs.addEach(function(entity, elapsed) { // eslint-disable-line no-unused-vars
         follow = game.entities.get(entity, "hitbox_for");
         game.entities.set(entity, "position", newPosition(entity, follow, game));
+        game.entities.set(heart, "position", newPosition(heart, follow, game));
         collisions = game.entities.get(entity, "collisions");
         indicatorType = game.entities.get(indicator,"type");
         for (i = 0; i < collisions.length; ++i) {
