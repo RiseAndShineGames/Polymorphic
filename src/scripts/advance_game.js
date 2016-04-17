@@ -1,9 +1,11 @@
 "use strict";
 
+var round, scores, roundScore;
+
 module.exports = function(entity, game) { // eslint-disable-line no-unused-vars
-	var round = game.entities.get(0,"round");
-	var scores = game.entities.get(0,"scores");
-	var roundScore = game.entities.get(0,"round_score");
+	round = game.entities.get(0,"round");
+	scores = game.entities.get(0,"scores");
+	roundScore = game.entities.get(0,"round_score");
 
 	if (round === 0) {
 		scores.round1 = roundScore;

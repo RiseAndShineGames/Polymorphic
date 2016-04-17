@@ -88,6 +88,12 @@
                     "time": 0,
                     "max": 30000,
                     "script": "./scripts/advance_game"
+                },
+                "change_indicator": {
+                  "running": true,
+                  "time": 0,
+                  "max": 10000,
+                  "script": "./scripts/change_indicator"
                 }
             },
             "follow": {
@@ -172,7 +178,7 @@
                 "height": 2880
             },
             "image": {
-                "name": "training.jpg",
+                "name": "TrainingBG.jpg",
                 "sourceWidth": 1280,
                 "sourceHeight": 960,
                 "destinationWidth": 3840,
@@ -194,12 +200,13 @@
                 "height": 80
             },
             "match": {
-                "id": 0,
+                "id": 8,
                 "offsetX": 0,
-                "offsetY": 850
+                "offsetY": 75,
+                "offsetZ": 0
             },
             "matchCenterX": {
-                "id": 0
+                "id": 8
             },
             "image": {
                 "name": "BabyFood.png"
@@ -263,11 +270,33 @@
                 "id": 5,
                 "offsetX": 1000,
                 "offsetY": 750,
-                "offsetZ": 100
+                "offsetZ": 1
             },
             "image": {
                 "name": "timer.png"
             }
+        },
+        {
+          "id":8,
+          "indicatorHolder": true,
+          "match": {
+              "id": 5,
+              "offsetX": 70,
+              "offsetY": 770,
+              "offsetZ": 1
+          },
+          "size": {
+            "width":220,
+            "height":70
+          },
+          "position": {
+            "x": 0,
+            "y": 0, 
+            "z": 0
+          },
+          "image":{
+            "name": "EatThis.png"
+          }
         }
     ],
     "end": [

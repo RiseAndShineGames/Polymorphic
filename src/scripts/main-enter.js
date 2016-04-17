@@ -1,6 +1,7 @@
 "use strict";
-var scores, bounds, containerImage, playerPosition, playerSize, playerAnimation, heartAnimation, cameraPosition, camera = 0, container = 3, player = 1, heart = 6;
+var scores, bounds, containerImage,indicatorImage, playerPosition, playerSize, playerAnimation, timers, heartAnimation, cameraPosition, camera = 0, container = 3, indicator = 4, player = 1, heart = 6;
 module.exports = function(game) { // eslint-disable-line no-unused-vars
+    game.sounds.play("polymorphic_game_loop.wav");
     bounds = game.entities.get(container,"size");
     containerImage = game.entities.get(container, "image");
     game.scaleCanvasToFitRectangle(1280,960);
@@ -11,17 +12,39 @@ module.exports = function(game) { // eslint-disable-line no-unused-vars
     heartAnimation = game.entities.get(heart, "animation");
     cameraPosition = game.entities.get(camera,"position");
     scores = game.entities.get(camera,"scores");
+    indicatorImage = game.entities.get(indicator,"image");
+    timers = game.entities.get(camera, "timers");
+    if (game.arguments["round"]) {
+        timers["end_level"].max = 60000;
+        var num =  Math.floor(Math.random() * 4) + 1;
+        game.entities.set(indicator,"type",num);
+        switch (num) {
+                case 1:
+                    indicatorImage.name = "YellowFood.png";
+                    break;
+                case 2:
+                    indicatorImage.name = "GreenFood.png";
+                    break;
+                case 3:
+                    indicatorImage.name = "BlueFood.png";
+                    break;
+                case 4:
+                    indicatorImage.name = "RedFood.png";
+                    break;
+            }
+    }
     if (game.arguments["scores"]) {
         scores.round1 = game.arguments["scores"].round1;
         scores.round2 = game.arguments["scores"].round2;
         scores.round3 = game.arguments["scores"].round3;
+        console.log(game.arguments["scores"]);
     } else {
         scores.round1 = 0;
         scores.round2 = 0;
         scores.round3 = 0;
     }
     if (game.arguments.round > 1) {
-        containerImage.name = "level_two.jpg";
+        containerImage.name = "GameBG.jpg";
         playerAnimation.name = "polywag";
         playerSize.width = 251;
         playerSize.height = 251;
