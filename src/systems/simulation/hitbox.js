@@ -62,7 +62,9 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
             particles.create(game, config);
             game.sounds.play("nom.wav");
             game.entities.destroy(other);
-            //game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });
+            if (otherType !== indicatorType) {
+                game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });
+            }
         }
     }, "player_hitbox");
 };
