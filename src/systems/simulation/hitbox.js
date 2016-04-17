@@ -66,7 +66,7 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
             game.sounds.play("dropletts.wav");
             game.entities.destroy(other);
             if (otherType !== indicatorType) {
-                game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });
+                game.entities.set(camera, "shake", { "duration": 250, "magnitude": 25 });
             } else {
                 oldType = indicatorType;
                 newType = Math.floor(Math.random() * 4) + 1;

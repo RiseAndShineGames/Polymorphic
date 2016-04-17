@@ -9078,8 +9078,8 @@
 			context.strokeStyle = "#ffab31";
 	        context.lineWidth = 3;
 	        context.textBaseline = "middle";
-	        context.fillText(msg, pos.x + (size.width * 0.45) - msg_size.width, pos.y + size.height * 0.4);
-	        context.strokeText(msg, pos.x + (size.width * 0.45) - msg_size.width, pos.y + size.height * 0.4);
+	        context.fillText(msg, pos.x + (size.width * 0.15) - msg_size.width, pos.y + size.height * 0.4);
+	        context.strokeText(msg, pos.x + (size.width * 0.15) - msg_size.width, pos.y + size.height * 0.4);
 	        msg = game.entities.get(entity, "subtitle");
 			msg_size = context.measureText(msg);
 	        context.font = "55px 'Teko'";
@@ -9265,7 +9265,7 @@
 	            game.sounds.play("dropletts.wav");
 	            game.entities.destroy(other);
 	            if (otherType !== indicatorType) {
-	                game.entities.set(camera, "shake", { "duration": 250, "magnitude": 7 });
+	                game.entities.set(camera, "shake", { "duration": 250, "magnitude": 25 });
 	            } else {
 	                oldType = indicatorType;
 	                newType = Math.floor(Math.random() * 4) + 1;
@@ -9599,7 +9599,7 @@
 
 	"use strict";
 
-	var name, sw, sp, shw, shp, nw, np, scene = 1, shadow = 2, frog_name = 3, frogs = __webpack_require__(103);
+	var final_score, name, sw, sp, shw, shp, nw, np, scene = 1, shadow = 2, frog_name = 3, frogs = __webpack_require__(103);
 	var keys = [
 	    { "value": "30", "name": "king_frog" },
 	    { "value": "25", "name": "frog_cordileone" },
@@ -9615,6 +9615,8 @@
 	];
 
 	module.exports = function(game) { // eslint-disable-line no-unused-vars
+	    final_score = game.arguments.final_score || -20;
+	    console.log(final_score);
 	    game.scaleCanvasToFitRectangle(1280,960);
 
 	    sw = game.entities.get(scene, "size").width;
@@ -9630,10 +9632,11 @@
 	    np.x = game.canvas.width * 0.5 - nw * 0.5;
 
 	    for (var i = 0; i < keys.length; i++) {
-	        if (parseInt(keys[i].value, 10) < game.arguments.final_score) {
+	        if (parseInt(keys[i].value, 10) <= final_score) {
 	            name = keys[i].name;
 	            break;
 	        }
+	        name = "donald";
 	    }
 
 	    game.entities.set(frog_name, "title", "You've become " + frogs[name].name);
@@ -9784,7 +9787,7 @@
 	        playerAnimation.name = "polywag";
 	        playerSize.width = 251;
 	        playerSize.height = 251;
-	        heartAnimation.name = "trump_heart";
+	        heartAnimation.name = "silver_heart";
 	    } else {
 	        playerAnimation.name = "swim";
 	        heartAnimation.name = "";

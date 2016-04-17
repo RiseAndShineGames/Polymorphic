@@ -1,6 +1,6 @@
 "use strict";
 
-var name, sw, sp, shw, shp, nw, np, scene = 1, shadow = 2, frog_name = 3, frogs = require("../data/frogs.json");
+var final_score, name, sw, sp, shw, shp, nw, np, scene = 1, shadow = 2, frog_name = 3, frogs = require("../data/frogs.json");
 var keys = [
     { "value": "30", "name": "king_frog" },
     { "value": "25", "name": "frog_cordileone" },
@@ -16,6 +16,8 @@ var keys = [
 ];
 
 module.exports = function(game) { // eslint-disable-line no-unused-vars
+    final_score = game.arguments.final_score || -20;
+    console.log(final_score);
     game.scaleCanvasToFitRectangle(1280,960);
 
     sw = game.entities.get(scene, "size").width;
@@ -31,10 +33,11 @@ module.exports = function(game) { // eslint-disable-line no-unused-vars
     np.x = game.canvas.width * 0.5 - nw * 0.5;
 
     for (var i = 0; i < keys.length; i++) {
-        if (parseInt(keys[i].value, 10) < game.arguments.final_score) {
+        if (parseInt(keys[i].value, 10) <= final_score) {
             name = keys[i].name;
             break;
         }
+        name = "donald";
     }
 
     game.entities.set(frog_name, "title", "You've become " + frogs[name].name);
