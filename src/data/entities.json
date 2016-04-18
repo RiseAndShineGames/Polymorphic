@@ -106,14 +106,13 @@
                 "id": 1
             },
             "image": {
-                "name": "PlayButton.png",
-                "alpha":1
+                "name": "PlayButton.png"
             },
             "timers": {
                 "pulse":{
                     "running": true,
                     "time": 0,
-                    "max": 15,
+                    "max": 10,
                     "script": "./scripts/pulse_fade"
                 }
             }
