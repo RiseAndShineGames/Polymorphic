@@ -61,6 +61,24 @@
                 "device": "gamepad",
                 "button": "a"
             }
+        ],
+        "home": [
+            {
+                "device" : "keyboard",
+                "button" : "h"
+            }
+        ],
+        "play": [
+            {
+                "device" : "keyboard",
+                "button" : "w"
+            }
+        ],
+        "credits": [
+            {
+                "device" : "keyboard",
+                "button" : "c"
+            }
         ]
     }
 }

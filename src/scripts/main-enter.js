@@ -56,6 +56,8 @@ module.exports = function(game) { // eslint-disable-line no-unused-vars
         playerSize.width = 251;
         playerSize.height = 251;
         heartAnimation.name = "silver_heart";
+        controlImage.alpha = 0;
+        controlTimers.pulse.running = false;
     } else if (game.arguments.round > 0) {
         playerAnimation.name = "midpoint";
         controlImage.alpha = 0;

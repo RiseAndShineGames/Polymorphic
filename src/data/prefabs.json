@@ -94,5 +94,23 @@
         "image": {
             "name": "bubbles.png"
         }
+    },
+    "button": {
+        "button": true,
+        "position": {
+            "x": 0,
+            "y": 0,
+            "z": 1
+        },
+        "size":{
+            "width": 220,
+            "height": 70
+        },
+        "image":{
+            "name": ""
+        },
+        "matchCenterX": {
+            "id" : 1
+        }
     }
 }

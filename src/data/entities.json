@@ -478,5 +478,41 @@
                 "height": 150
             }
         }
+    ],
+    "credits": [
+        {
+            "id": 0,
+            "camera": true,
+            "strokeStyle": "white",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": -1
+            },
+            "matchCanvasSize": true
+        },
+        {
+            "id": 1,
+            "background": true,
+            "viewPort": true,
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "size": {
+                "width": 1280,
+                "height": 960
+            },
+            "matchCenterX": {
+                "id": 0
+            },
+            "matchCenterY": {
+                "id": 0
+            },
+            "image": {
+                "name": "Credits.png"
+            }
+        }
     ]
 }

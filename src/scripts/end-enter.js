@@ -1,6 +1,7 @@
 "use strict";
 
 var final_score, name, sw, sp, shw, shp, nw, np, scene = 1, shadow = 2, frog_name = 3, frogs = require("../data/frogs.json");
+var home, homeImage, homePos, credits, creditsImage, creditsPos, play, playImage, playPos;
 var keys = [
     { "value": "50", "name": "king_frog" },
     { "value": "40", "name": "frog_cordileone" },
@@ -52,5 +53,31 @@ module.exports = function(game) { // eslint-disable-line no-unused-vars
     game.entities.set(frog_name, "title", "You've become " + frogs[name].name);
     game.entities.set(frog_name, "subtitle", frogs[name].subtitle);
     game.entities.set(shadow, "won_frog", frogs[name].image);
+
+    home = game.instantiatePrefab("button");
+    game.entities.set(home,"home",true);
+    game.entities.remove(home,"matchCenterX");
+    homeImage = game.entities.get(home,"image");
+    homePos = game.entities.get(home,"position");
+    homeImage.name = "HomeButton.png";
+    homePos.y = 225;
+    homePos.x = 160;
+
+    play = game.instantiatePrefab("button");
+    game.entities.set(play,"play",true);
+    game.entities.remove(play,"matchCenterX");
+    playImage = game.entities.get(play,"image");
+    playPos = game.entities.get(play,"position");
+    playImage.name = "PlayButton.png";
+    playPos.y = 145;
+    playPos.x = 1000;
+
+    credits = game.instantiatePrefab("button");
+    game.entities.set(credits,"credits",true);
+    creditsImage = game.entities.get(credits,"image");
+    creditsPos = game.entities.get(credits,"position");
+    creditsImage.name = "CreditsButton.png";
+    creditsPos.y = 755;
+
 
 };

@@ -70,6 +70,18 @@
             "scenes": [
                 "title"
             ]
+        },
+        {
+            "name": "./systems/simulation/end-menu",
+            "scenes": [
+                "end"
+            ]
+        },
+        {
+            "name": "./systems/simulation/credits-menu",
+            "scenes": [
+                "credits"
+            ]
         }
     ],
     "renderer": [
