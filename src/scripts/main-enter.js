@@ -1,7 +1,6 @@
 "use strict";
-var scores, bounds, containerImage,indicatorImage, playerPosition, playerSize, playerAnimation, timers, heartAnimation, cameraPosition, camera = 0, container = 3, indicator = 4, player = 1, heart = 6;
+var scores, bounds, containerImage, controlImage, controlTimers, indicatorImage, playerPosition, playerSize, playerAnimation, timers, heartAnimation, cameraPosition, camera = 0, container = 3, indicator = 4, player = 1, heart = 6, controls = 9;
 module.exports = function(game) { // eslint-disable-line no-unused-vars
-
     game.sounds.play("polymorphic_game_loop.mp3",true);
     bounds = game.entities.get(container,"size");
     containerImage = game.entities.get(container, "image");
@@ -17,6 +16,9 @@ module.exports = function(game) { // eslint-disable-line no-unused-vars
     scores = game.entities.get(camera,"scores");
     indicatorImage = game.entities.get(indicator,"image");
     timers = game.entities.get(camera, "timers");
+
+    controlImage = game.entities.get(controls,"image");
+    controlTimers = game.entities.get(controls, "timers");
 
     if (game.arguments["round"]) {
         timers["end_level"].max = 60000;
@@ -56,6 +58,8 @@ module.exports = function(game) { // eslint-disable-line no-unused-vars
         heartAnimation.name = "silver_heart";
     } else if (game.arguments.round > 0) {
         playerAnimation.name = "midpoint";
+        controlImage.alpha = 0;
+        controlTimers.pulse.running = false;
     } else {
         playerAnimation.name = "swim";
         heartAnimation.name = "";

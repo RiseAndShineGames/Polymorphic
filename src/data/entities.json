@@ -356,7 +356,45 @@
           },
           "image":{
             "name": "EatThis.png"
-          }
+          },
+          "timers": {
+                "pulse":{
+                    "running": false,
+                    "time": 0,
+                    "max": 5,
+                    "script": "./scripts/pulse_fade"
+                }
+            }
+        },
+        {
+            "id": 9,
+            "name": "controls",
+            "size": {
+                "width": 160,
+                "height": 100
+            },
+            "position":{
+                "x":0,
+                "y":0,
+                "z":0
+            },
+            "match":{
+                "id": 5,
+                "offsetX": 25,
+                "offsetY": 25,
+                "offsetZ": 1
+            },
+            "image": {
+                "name": "Controls.png"
+            },
+            "timers": {
+                "pulse":{
+                    "running": true,
+                    "time": 0,
+                    "max": 5,
+                    "script": "./scripts/pulse_fade"
+                }
+            }
         }
     ],
     "end": [
