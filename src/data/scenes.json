@@ -1,5 +1,6 @@
 {
     "title": {
+        "first": true,
         "onEnter": "./scripts/title-enter",
         "onExit": "./scripts/title-exit"
     },
@@ -8,7 +9,6 @@
         "onExit": "./scripts/main-exit"
     },
     "end": {
-        "first": true,
         "onEnter": "./scripts/end-enter",
         "onExit": "./scripts/end-exit"
     },
