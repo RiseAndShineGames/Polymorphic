@@ -109,6 +109,12 @@
         "image":{
             "name": ""
         },
+        "match":{
+            "id": 0,
+            "offsetX": 0,
+            "offsetY": 0,
+            "offsetZ": 0
+        },
         "matchCenterX": {
             "id" : 1
         }
