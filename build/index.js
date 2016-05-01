@@ -9125,7 +9125,7 @@
 	"use strict";
 
 	var point, angle, opposite, adjacent, distance;
-	var collidables, vp, vs, vc, op, os, oc, i, image, size = { "width": 20, "height": 45 };
+	var collidables, vp, vs, vc, op, os, oc, i, image, size = { "width": 45 }, constant = 21150;
 	var radius, type;
 	var viewPort = 5;
 	module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
@@ -9178,6 +9178,11 @@
 	                    angle += Math.PI;
 	                    context.translate(point.x, point.y);
 	                    context.rotate(angle);
+	                    // Law of inverse variation:
+	                    // Constant = 21150 so width = 45 at the radar radius
+	                    // @see http://www.regentsprep.org/regents/math/algtrig/ate7/inverse%20variation.htm
+	                    size.width = constant / distance;
+	                    size.height = size.width * 2.5;
 	                    context.drawImage(image, -size.width * 0.5, -size.height * 0.5, size.width, size.height);
 	                    context.rotate(-angle);
 	                    context.translate(-point.x, -point.y);
