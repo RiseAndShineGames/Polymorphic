@@ -11,7 +11,7 @@ config.arcWidth = Math.PI * 2;
 config.lifeSpanMin = 500;
 config.lifeSpanMax = 750;
 
-var follow, angle, entitySize, otherSize, otherPos, collisions, round, other, i, indicatorImage, type, oldType, newType, otherVal, otherType, indicatorType, camera = 0, player = 1, indicator = 4, heart = 6; // eslint-disable-line no-unused-vars
+var follow, angle, entitySize, otherSize, otherPos, collisions, round, other, i, indicatorImage, type, oldType, newType, otherVal, otherType, indicatorType, cam_timers, camera = 0, player = 1, indicator = 4, heart = 6; // eslint-disable-line no-unused-vars
 
 
 function newPosition(entity, other, game) {
@@ -66,6 +66,8 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
             game.sounds.play("dropletts.mp3");
             game.entities.destroy(other);
             if (otherType !== indicatorType) {
+                cam_timers = game.entities.get(camera, "timers");
+                cam_timers.flash_screen.running = true;
                 game.entities.set(camera, "shake", { "duration": 250, "magnitude": 35 });
             } else {
                 newType = Math.floor(Math.random() * 4) + 1;

@@ -147,6 +147,11 @@
                   "time": 0,
                   "max": 10000,
                   "script": "./scripts/change_indicator"
+                },
+                "flash_screen": {
+                    "running": false,
+                    "time": 0,
+                    "max": 250
                 }
             },
             "follow": {
