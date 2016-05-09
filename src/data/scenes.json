@@ -15,5 +15,6 @@
     "credits": {
         "onEnter": "./scripts/credits-enter",
         "onExit": "./scripts/credits-exit"
-    }
+    },
+    "tutorial": {}
 }

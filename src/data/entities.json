@@ -70,7 +70,7 @@
             "name": "controls",
             "size": {
                 "width": 320,
-                "height": 200
+                "height": 260
             },
             "position":{
                 "x":0,
@@ -80,7 +80,7 @@
             "match":{
                 "id": 1,
                 "offsetX": 25,
-                "offsetY": 725,
+                "offsetY": 695,
                 "offsetZ": 1
             },
             "image": {
@@ -107,6 +107,33 @@
             },
             "image": {
                 "name": "PlayButton.png"
+            },
+            "timers": {
+                "pulse":{
+                    "running": true,
+                    "time": 0,
+                    "max": 10,
+                    "script": "./scripts/pulse_fade"
+                }
+            }
+        },
+        {
+            "id": 5,
+            "name": "tutorial",
+            "size": {
+                "width": 220,
+                "height": 70
+            },
+            "position":{
+                "x": 0,
+                "y": 40,
+                "z": 2
+            },
+            "matchCenterX":{
+                "id": 1
+            },
+            "image": {
+                "name": "TutorialButton.png"
             },
             "timers": {
                 "pulse":{
@@ -512,6 +539,68 @@
             },
             "image": {
                 "name": "Credits.png"
+            }
+        }
+    ],
+    "tutorial": [
+        {
+            "id": 0,
+            "camera": true,
+            "strokeStyle": "white",
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": -1
+            },
+            "matchCanvasSize": true
+        },
+        {
+            "id": 1,
+            "background": true,
+            "viewPort": true,
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 1
+            },
+            "size": {
+                "width": 1280,
+                "height": 960
+            },
+            "matchCenterX": {
+                "id": 0
+            },
+            "matchCenterY": {
+                "id": 0
+            },
+            "image": {
+                "name": "tutorial.png"
+            }
+        },
+        {
+            "id": 2,
+            "indicator": true,
+            "type": 0,
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 5
+            },
+            "size": {
+                "width": 220,
+                "height": 70
+            },
+            "match": {
+                "id": 1,
+                "offsetX": 530,
+                "offsetY": 815,
+                "offsetZ": 2
+            },
+            "matchCenterX": {
+                "id": 1
+            },
+            "image": {
+                "name": "BackButton.png"
             }
         }
     ]

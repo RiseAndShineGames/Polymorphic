@@ -72,6 +72,12 @@
             ]
         },
         {
+            "name": "./systems/simulation/tutorial",
+            "scenes": [
+                "tutorial"
+            ]
+        },
+        {
             "name": "./systems/simulation/end-menu",
             "scenes": [
                 "end"

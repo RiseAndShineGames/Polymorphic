@@ -8,5 +8,8 @@ module.exports = function(ecs, game) { // eslint-disable-line no-unused-vars
             pt = game.entities.get(player, "timers");
             pt.intro.running = true;
         }
+        if (game.inputs.button("tutorial")) {
+            game.switchScene("tutorial");
+        }
     }, "background");
 };

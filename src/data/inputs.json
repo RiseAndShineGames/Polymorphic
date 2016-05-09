@@ -79,6 +79,18 @@
                 "device" : "keyboard",
                 "button" : "c"
             }
+        ],
+        "tutorial": [
+            {
+                "device": "keyboard",
+                "button": "t"
+            }
+        ],
+        "back": [
+            {
+                "device": "keyboard",
+                "button": "b"
+            }
         ]
     }
 }

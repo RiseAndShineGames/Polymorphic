@@ -11,5 +11,4 @@ module.exports = function(entity, game) {
     timers.pulse.time = 0;
     timers.pulse.running = true;
 
-
 };
